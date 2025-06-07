@@ -8,6 +8,8 @@ PQFlow Pro is a secure, scalable, and fully client-side virtual queue system des
 PQFlow/
 ├── pages/
 │   ├── login.html            # Halaman login admin
+│   ├── register.html            # Halaman login admin
+│   ├── forgot-password.html            # Halaman login admin
 │   ├── admin.html            # Panel kontrol admin per cabang/layanan
 │   ├── dashboard.html        # Dashboard multi-cabang untuk superadmin
 │   └── tv.html               # Mode fullscreen untuk display nomor panggilan
@@ -20,7 +22,7 @@ PQFlow/
 ├── package.json              # (Opsional) untuk Workbox build & dev scripts
 ├── scripts/
 │   ├── firestore.js          # Inisialisasi Firebase & Firestore SDK
-│   ├── auth.js               # Logic Firebase Auth (login/logout)
+│   ├── auth.js               # Logic Firebase Auth (login/logout/register/forgot password)
 │   ├── user.js               # Logic auto-join & status user
 │   ├── admin.js              # Logic kontrol antrian admin
 │   ├── tv.js                 # Logic display untuk TV mode
