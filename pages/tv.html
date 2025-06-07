@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <title>TV Mode — PQFlow Pro</title>
+
+  <!-- PWA Manifest & Favicon -->
+  <link rel="manifest" href="../manifest.json"/>
+  <link rel="icon" href="../favicon.ico"/>
+
+  <!-- Global Styles -->
+  <link rel="stylesheet" href="/styles/style.css"/>
+  <!-- TV Mode Styles -->
+  <link rel="stylesheet" href="../styles/admin/tv.css"/>
+</head>
+<body>
+  <main class="tv-container" role="region" aria-label="PQFlow Pro TV Display">
+    <!-- Progress Bar Container -->
+    <section class="tv-progress-section" role="status" aria-live="polite">
+      <div class="tv-progress-labels">
+        <div class="tv-label">
+          <span class="tv-label-title">Now Serving:</span>
+          <span class="tv-current" id="tv-current-number"></span>
+        </div>
+        <div class="tv-label">
+          <span class="tv-label-title">Your Number:</span>
+          <span class="tv-your" id="tv-your-number"></span>
+        </div>
+      </div>
+      <progress class="tv-progress-bar" id="tv-progress-bar" value="0" max="100"></progress>
+      <div class="tv-progress-text" id="tv-progress-text"></div>
+    </section>
+  </main>
+
+  <!-- Scripts -->
+  <script src="../scripts/utils.js"></script>
+  <script src="../scripts/firestore.js"></script>
+  <script src="../scripts/tv.js"></script>
+  <script src="../scripts/pwa.js"></script>
+</body>
+</html>
