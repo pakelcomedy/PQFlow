@@ -1,0 +1,8 @@
+{
+  "name": "PQFlow Pro",
+  "short_name": "PQFlow",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1e40af"
+}

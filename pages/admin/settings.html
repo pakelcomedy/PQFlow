@@ -12,38 +12,18 @@
 
   <!-- Global Styles -->
   <link rel="stylesheet" href="../../styles/style.css" />
-  <!-- Admin-specific Styles -->
+  <!-- Admin Dashboard Styles -->
   <link rel="stylesheet" href="../../styles/admin/dashboard.css" />
+  <!-- Admin Settings Styles -->
   <link rel="stylesheet" href="../../styles/admin/settings.css" />
 </head>
 <body>
   <!-- Skip Link -->
   <a href="#main-settings" class="skip-link">Skip to settings panel</a>
 
-  <!-- HEADER -->
-  <!-- <header class="site-header" role="banner">
-    <div class="container header-grid">
-      <a href="../../index.html" class="logo" aria-label="PQFlow Pro Home">PQFlow Pro</a>
-      <button class="mobile-nav-toggle" aria-controls="sidebar" aria-expanded="false">
-        <span class="sr-only">Toggle sidebar</span>☰
-      </button>
-      <nav class="main-nav" role="navigation">
-        <ul>
-          <li><a href="../../index.html">Home</a></li>
-          <li><a href="index.html">Admin Panel</a></li>
-          <li><a href="dashboard.html">Dashboard</a></li>
-          <li><a href="history.html">History</a></li>
-          <li><a href="export.html">Export Data</a></li>
-          <li><a href="settings.html" class="active">Settings</a></li>
-          <li><button id="logout-btn" class="btn btn-outline">Logout</button></li>
-        </ul>
-      </nav>
-    </div>
-  </header> -->
-
-  <!-- LAYOUT -->
+  <!-- Layout: Sidebar + Main -->
   <div class="dashboard-layout">
-    <!-- SIDEBAR -->
+    <!-- Sidebar -->
     <aside id="sidebar" class="sidebar" role="navigation">
       <ul class="sidebar-menu">
         <li><a href="index.html"><span aria-hidden="true">🗂️</span> Manage Queues</a></li>
@@ -54,73 +34,112 @@
       </ul>
     </aside>
 
-    <!-- MAIN SETTINGS CONTENT -->
+    <!-- Main Settings Content -->
     <main id="main-settings" class="dashboard-content" role="main">
       <div class="container">
-        <h1>Settings</h1>
+        <h1>System & Counter Settings</h1>
 
-        <!-- Branch Info -->
+        <!-- System Identity -->
         <section class="settings-section">
-          <h2>Branch Details</h2>
+          <h2>System Identity</h2>
           <div class="form-group">
-            <label for="branch-name">Branch Name</label>
-            <input type="text" id="branch-name" placeholder="e.g. RS Jakarta" />
-          </div>
-          <div class="form-group">
-            <label for="branch-address">Address</label>
-            <input type="text" id="branch-address" placeholder="e.g. Jl. Sudirman No.1" />
+            <label for="system-name">Organization Name</label>
+            <input type="text" id="system-name" placeholder="e.g. RS Sutomo / Bengkel Sumono" />
           </div>
         </section>
 
-        <!-- Opening Hours -->
-        <section class="settings-section">
-          <h2>Opening Hours</h2>
-          <div class="hours-grid">
-            <div class="form-group">
-              <label for="open-time">Open Time</label>
-              <input type="time" id="open-time" />
-            </div>
-            <div class="form-group">
-              <label for="close-time">Close Time</label>
-              <input type="time" id="close-time" />
-            </div>
-          </div>
-        </section>
+      <!-- Operating Hours -->
+      <section class="settings-section">
+        <h2>Operating Hours</h2>
+        <p class="note">Users outside active hours will see “Service Not Yet Open.”</p>
 
-        <!-- Services & Counters -->
-        <section class="settings-section">
-          <h2>Services & Counters</h2>
-          <div id="services-list" class="list-group">
-            <!-- JS injects existing services -->
-          </div>
-          <button id="add-service-btn" class="btn btn-outline mt-sm">+ Add Service</button>
-        </section>
+        <!-- Mode Toggle -->
+        <div class="form-group">
+          <label>
+            <input type="radio" name="hours-mode" value="custom" checked />
+            Use Custom Hours
+          </label>
+          <label class="ml-sm">
+            <input type="radio" name="hours-mode" value="disabled" />
+            Disable Operating Hours
+          </label>
+          <label class="ml-sm">
+            <input type="radio" name="hours-mode" value="24h" />
+            24-Hour Service
+          </label>
+        </div>
 
-        <!-- Priority Settings -->
-        <section class="settings-section">
-          <h2>Priority Options</h2>
+        <!-- Custom Hours Inputs -->
+        <div id="custom-hours" class="hours-grid">
           <div class="form-group">
-            <label>
-              <input type="checkbox" id="enable-priority" />
-              Enable Priority Queue
-            </label>
+            <label for="open-time">Open Time</label>
+            <input type="time" id="open-time" />
           </div>
           <div class="form-group">
-            <label for="priority-label">Priority Label</label>
-            <input type="text" id="priority-label" placeholder="e.g. Emergency" disabled />
+            <label for="close-time">Close Time</label>
+            <input type="time" id="close-time" />
           </div>
+        </div>
+      </section>
+
+        <!-- Counter Settings -->
+        <section class="settings-section">
+          <h2>Manage Counters</h2>
+
+          <!-- Counter Table -->
+          <div class="table-wrapper">
+            <table class="data-table" aria-describedby="counters-desc">
+              <caption id="counters-desc" class="visually-hidden">
+                List of service counters with edit and delete actions.
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Counter ID</th>
+                  <th scope="col">Label</th>
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="counters-body">
+                <!--
+                  JS will inject rows like:
+                  <tr data-id="counter1">
+                    <td>counter1</td>
+                    <td>
+                      <input type="text" class="counter-label" value="Counter 1" />
+                    </td>
+                    <td>
+                      <button class="btn btn-outline btn-save">💾</button>
+                      <button class="btn btn-outline btn-delete">🗑️</button>
+                    </td>
+                  </tr>
+                -->
+              </tbody>
+            </table>
+          </div>
+
+          <button id="add-counter-btn" class="btn btn-outline mt-sm">+ Add Counter</button>
         </section>
 
-        <!-- Save / Reset Actions -->
-        <section class="settings-actions form-group mt-lg">
-          <button id="save-settings-btn" class="btn btn-primary">Save Settings</button>
-          <button id="reset-settings-btn" class="btn btn-outline ml-sm">Reset to Defaults</button>
-        </section>
+  <!-- Counter Settings -->
+  <section class="settings-section">
+    <h2>Manage Counters</h2>
+    <!-- … your existing table … -->
+    <button id="add-counter-btn" class="btn btn-outline mt-sm">+ Add Counter</button>
+  </section>
+
+  <!-- Save / Reset / Logout Actions -->
+  <section class="settings-actions" style="display: flex; align-items: center;">
+    <button id="save-settings-btn" class="btn btn-primary">Save All Settings</button>
+    <button id="reset-settings-btn" class="btn btn-outline ml-sm">Reset to Defaults</button>
+    <!-- Logout pushed to the right -->
+    <button id="logout-btn" class="btn btn-outline ml-auto">Logout</button>
+  </section>
+
       </div>
     </main>
   </div>
 
-  <!-- FOOTER -->
+  <!-- Footer -->
   <footer class="site-footer" role="contentinfo">
     <div class="container footer-grid">
       <div class="footer-col">
@@ -145,20 +164,20 @@
     </div>
   </footer>
 
-  <!-- JS Files -->
-  <script src="../../scripts/utils.js"></script>
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+  <!-- Inisialisasi Firestore/Auth -->
   <script src="../../scripts/firestore.js"></script>
-  <script src="../../scripts/admin/settings.js"></script>
+
+  <!-- ROUTE GUARD -->
+  <script src="../../scripts/auth-guard.js"></script>
+
+  <!-- Script Admin / PWA / Dll -->
+  <script src="../../scripts/auth.js"></script>
+  <script src="../../scripts/admin/admin.js"></script>
   <script src="../../scripts/pwa.js"></script>
-  <script>
-    // Mobile sidebar toggle
-    const toggleBtn = document.querySelector('.mobile-nav-toggle');
-    const sidebar = document.getElementById('sidebar');
-    toggleBtn.addEventListener('click', () => {
-      const expanded = toggleBtn.getAttribute('aria-expanded') === 'true';
-      toggleBtn.setAttribute('aria-expanded', !expanded);
-      sidebar.classList.toggle('open');
-    });
-  </script>
 </body>
 </html>

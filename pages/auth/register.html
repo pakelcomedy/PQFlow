@@ -7,25 +7,20 @@
   <title>Register — PQFlow Pro</title>
 
   <!-- PWA Manifest -->
-  <link rel="manifest" href="../manifest.json" />
+  <link rel="manifest" href="../../manifest.json" />
   <!-- Favicon -->
-  <link rel="icon" href="../favicon.ico" />
+  <link rel="icon" href="../../favicon.ico" />
   <!-- Global Styles -->
-  <link rel="stylesheet" href="../styles/style.css" />
+  <link rel="stylesheet" href="../../styles/style.css" />
 </head>
 <body>
-  <!-- Skip Link for Accessibility -->
+  <!-- Accessibility Skip Link -->
   <a href="#register-form" class="skip-link">Skip to registration form</a>
 
   <!-- HEADER -->
   <header class="site-header" role="banner">
     <div class="container">
-      <a href="../index.html" class="logo" aria-label="PQFlow Pro Home">PQFlow Pro</a>
-      <nav class="main-nav" role="navigation">
-        <ul>
-          <li><a href="../index.html">Home</a></li>
-        </ul>
-      </nav>
+      <a href="../../index.html" class="logo" aria-label="PQFlow Pro Home">PQFlow Pro</a>
     </div>
   </header>
 
@@ -33,23 +28,22 @@
   <main id="main-content" class="login-page">
     <section class="login-section container" aria-labelledby="register-title">
       <h1 id="register-title">Admin Registration</h1>
-      <p class="login-intro">Please create an admin account to manage queues.</p>
+      <p class="login-intro">Please register your organization to manage queues.</p>
 
-      <!-- Error & Status Message -->
+      <!-- Error / Status Message -->
       <div id="register-message" class="status-message" role="alert" aria-live="assertive"></div>
 
       <!-- Registration Form -->
-      <form id="register-form" action="#" method="post" novalidate>
+      <form id="register-form" novalidate>
         <div class="form-group">
-          <label for="name">Full Name</label>
+          <label for="org-name">Organization Name</label>
           <input
             type="text"
-            id="name"
-            name="name"
-            placeholder="Your full name"
+            id="org-name"
+            name="organization"
+            placeholder="e.g. RS Sutomo"
             required
-            aria-required="true"
-            autocomplete="name" />
+            autocomplete="organization" />
         </div>
 
         <div class="form-group">
@@ -60,7 +54,6 @@
             name="email"
             placeholder="you@example.com"
             required
-            aria-required="true"
             autocomplete="username" />
         </div>
 
@@ -72,7 +65,6 @@
             name="password"
             placeholder="••••••••"
             required
-            aria-required="true"
             autocomplete="new-password" />
         </div>
 
@@ -84,7 +76,6 @@
             name="confirm-password"
             placeholder="••••••••"
             required
-            aria-required="true"
             autocomplete="new-password" />
         </div>
 
@@ -103,15 +94,15 @@
   <footer class="site-footer" role="contentinfo">
     <div class="container footer-grid">
       <div class="footer-col">
-        <a href="../index.html" class="logo">PQFlow Pro</a>
+        <a href="../../index.html" class="logo">PQFlow Pro</a>
         <p>&copy; 2025 PQFlow Pro. All rights reserved.</p>
       </div>
       <div class="footer-col">
         <h4>Quick Links</h4>
         <ul>
-          <li><a href="../index.html#how-it-works">How It Works</a></li>
-          <li><a href="../index.html#features">Features</a></li>
-          <li><a href="admin.html">Admin</a></li>
+          <li><a href="../../index.html#how-it-works">How It Works</a></li>
+          <li><a href="../../index.html#features">Features</a></li>
+          <li><a href="../admin/index.html">Admin Panel</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -124,10 +115,19 @@
     </div>
   </footer>
 
-  <!-- JS Files -->
-  <script src="../scripts/utils.js"></script>
-  <script src="../scripts/auth.js"></script>
-  <script src="../scripts/i18n.js"></script>
-  <script src="../scripts/pwa.js"></script>
+  <!-- 1) Firebase SDKs (must load first) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+  <!-- 2) Firestore Init (defines window.firebase & window.db) -->
+  <script src="../../scripts/firestore.js"></script>
+
+  <!-- 3) Auth Logic (uses global firebase & db) -->
+  <script src="../../scripts/auth.js"></script>
+
+  <!-- 4) i18n & PWA -->
+  <script src="../../scripts/i18n.js"></script>
+  <script src="../../scripts/pwa.js"></script>
 </body>
 </html>

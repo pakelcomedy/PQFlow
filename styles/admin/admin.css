@@ -306,3 +306,66 @@
   white-space: nowrap;
   border: 0;
 }
+
+/* ==========================================================================
+   DROPDOWN (SELECT) STYLING
+   ========================================================================== */
+
+/* Dasar untuk semua <select> di area admin */
+.dashboard-content select,
+.form-group select {
+  appearance: none;                  /* Hilangkan styling bawaan browser */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 100%;                       /* Lebar penuh container */
+  padding: var(--spacing-sm) var(--spacing-md);
+  padding-right: var(--spacing-lg); /* Ruang untuk ikon panah */
+  font-size: 1rem;
+  color: var(--admin-secondary);
+  background-color: var(--admin-card);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--radius);
+  transition: border-color var(--transition), box-shadow var(--transition);
+  cursor: pointer;
+}
+
+/* Fokus state */
+.dashboard-content select:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--admin-primary);
+  box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.2);
+}
+
+/* Kontainer relative untuk panah custom */
+.select-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+/* Ikon panah */
+.select-wrapper::after {
+  content: '▾';
+  position: absolute;
+  top: 50%;
+  right: var(--spacing-md);
+  transform: translateY(-50%);
+  font-size: 0.8rem;
+  color: var(--admin-gray-500);
+  pointer-events: none;
+}
+
+/* Jika butuh menangani multiple dropdown yang berbeda, bisa pakai class */
+.counter-selector .select-wrapper::after,
+.form-group.select-wrapper::after {
+  color: var(--admin-secondary);
+}
+
+/* Responsive tweak: pastikan padding kanan cukup di mobile */
+@media (max-width: 768px) {
+  .dashboard-content select,
+  .form-group select {
+    padding-right: var(--spacing-md);
+  }
+}

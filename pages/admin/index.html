@@ -19,25 +19,6 @@
   <!-- Skip Link -->
   <a href="#main-admin" class="skip-link">Skip to admin panel</a>
 
-  <!-- HEADER
-  <header class="site-header" role="banner">
-    <div class="container header-grid">
-      <a href="../../index.html" class="logo" aria-label="PQFlow Pro Home">PQFlow Pro</a>
-      <button class="mobile-nav-toggle" aria-controls="sidebar" aria-expanded="false">
-        <span class="sr-only">Toggle sidebar</span>☰
-      </button>
-      <nav class="main-nav" role="navigation">
-        <ul>
-          <li><a href="../../index.html">Home</a></li>
-          <li><a href="index.html" class="active">Admin Panel</a></li>
-          <li><a href="dashboard.html">Dashboard</a></li>
-          <li><button id="logout-btn" class="btn btn-outline">Logout</button></li>
-        </ul>
-      </nav>
-    </div>
-  </header> -->
-
-  <!-- LAYOUT -->
   <div class="dashboard-layout">
     <!-- SIDEBAR -->
     <aside id="sidebar" class="sidebar" role="navigation">
@@ -50,15 +31,20 @@
       </ul>
     </aside>
 
-    <!-- MAIN ADMIN CONTENT -->
+    <!-- MAIN CONTENT -->
     <main id="main-admin" class="dashboard-content" role="main">
       <div class="container">
         <h1>Manage Queues</h1>
-        <section class="branch-selector form-group">
-          <label for="branch-select">Select Branch:</label>
-          <select id="branch-select" aria-label="Select branch"></select>
+
+        <!-- Counter Selector -->
+        <section class="form-group counter-selector">
+          <label for="counter-select">Select Counter:</label>
+          <select id="counter-select" aria-label="Select counter">
+            <!-- JS injects <option value="counterId">Counter Label</option> -->
+          </select>
         </section>
 
+        <!-- Service Tabs -->
         <section class="service-tabs">
           <h2>Services</h2>
           <div id="service-tabs" class="tabs">
@@ -66,15 +52,17 @@
           </div>
         </section>
 
+        <!-- Queue Controls -->
         <section class="queue-controls">
           <div class="controls-grid">
             <button id="btn-call" class="btn btn-primary">Call Next</button>
             <button id="btn-skip" class="btn btn-outline">Skip</button>
-            <button id="btn-complete" class="btn btn-outline">Complete</button>
             <button id="btn-reset" class="btn btn-outline">Reset</button>
+            <button id="btn-back" class="btn btn-outline">Back to Previous</button>
           </div>
         </section>
 
+        <!-- Current Status -->
         <section class="current-status">
           <h2>Current Number</h2>
           <div class="status-display">
@@ -82,12 +70,13 @@
           </div>
         </section>
 
+        <!-- Waiting List -->
         <section class="waiting-list">
           <h2>Waiting List</h2>
           <div class="table-wrapper">
             <table class="data-table" aria-describedby="waiting-list-desc">
               <caption id="waiting-list-desc" class="visually-hidden">
-                List of waiting queue numbers with timestamp and priority.
+                List of waiting queue numbers with timestamp, priority, and source.
               </caption>
               <thead>
                 <tr>
@@ -103,6 +92,34 @@
             </table>
           </div>
         </section>
+
+        <!-- Manual Check-In Mode -->
+        <section class="settings-section">
+          <h2>Manual Check-In</h2>
+          <p class="note">For walk-in customers: fill in name, select service & counter.</p>
+          <form id="manual-checkin-form" class="form-group">
+            <div class="form-group">
+              <label for="manual-name">Customer Name</label>
+              <input type="text" id="manual-name" placeholder="e.g. John Doe" required />
+            </div>
+            <div class="form-group">
+              <label for="manual-service">Service</label>
+              <select id="manual-service" required>
+                <!-- JS injects service options -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="manual-counter">Counter</label>
+              <select id="manual-counter" required>
+                <!-- JS injects counter options -->
+              </select>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">Check In</button>
+            </div>
+          </form>
+        </section>
+
       </div>
     </main>
   </div>
@@ -132,20 +149,34 @@
     </div>
   </footer>
 
-  <!-- Scripts -->
-  <script src="../../scripts/utils.js"></script>
-  <script src="../../scripts/firestore.js"></script>
-  <script src="../../scripts/admin/admin.js"></script>
-  <script src="../../scripts/pwa.js"></script>
+    <!-- ROUTE GUARD -->
   <script>
-    // Mobile sidebar toggle
-    const toggleBtn = document.querySelector('.mobile-nav-toggle');
-    const sidebar = document.getElementById('sidebar');
-    toggleBtn.addEventListener('click', () => {
-      const expanded = toggleBtn.getAttribute('aria-expanded') === 'true';
-      toggleBtn.setAttribute('aria-expanded', !expanded);
-      sidebar.classList.toggle('open');
+    firebase.auth().onAuthStateChanged(user => {
+      const p = window.location.pathname;
+      if (!user && p.includes('/pages/admin/')) {
+        window.location.replace('../auth/login.html');
+      }
+      if (user && p.includes('/pages/auth/')) {
+        window.location.replace('../admin/index.html');
+      }
     });
   </script>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+  <!-- Inisialisasi Firestore/Auth -->
+  <script src="../../scripts/firestore.js"></script>
+
+  <!-- ROUTE GUARD -->
+  <script src="../../scripts/auth-guard.js"></script>
+
+  <!-- Script Admin / PWA / Dll -->
+  <script src="../../scripts/auth.js"></script>
+  <script src="../../scripts/admin/admin.js"></script>
+  <script src="../../scripts/pwa.js"></script>
+
 </body>
 </html>

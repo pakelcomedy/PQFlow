@@ -7,11 +7,11 @@
   <title>Login — PQFlow Pro</title>
 
   <!-- PWA Manifest -->
-  <link rel="manifest" href="../manifest.json" />
+  <link rel="manifest" href="../../manifest.json" />
   <!-- Favicon -->
-  <link rel="icon" href="../favicon.ico" />
+  <link rel="icon" href="../../favicon.ico" />
   <!-- Global Styles -->
-  <link rel="stylesheet" href="../styles/style.css" />
+  <link rel="stylesheet" href="../../styles/style.css" />
 </head>
 <body>
   <!-- Skip Link for Accessibility -->
@@ -20,10 +20,10 @@
   <!-- HEADER -->
   <header class="site-header" role="banner">
     <div class="container">
-      <a href="../index.html" class="logo" aria-label="PakelFileConvert Home">PQFlow Pro</a>
+      <a href="../../index.html" class="logo" aria-label="PQFlow Pro Home">PQFlow Pro</a>
       <nav class="main-nav" role="navigation">
         <ul>
-          <li><a href="../index.html">Home</a></li>
+          <li><a href="../../index.html">Home</a></li>
         </ul>
       </nav>
     </div>
@@ -81,15 +81,15 @@
   <footer class="site-footer" role="contentinfo">
     <div class="container footer-grid">
       <div class="footer-col">
-        <a href="index.html" class="logo">PQFlow Pro</a>
+        <a href="../../index.html" class="logo">PQFlow Pro</a>
         <p>&copy; 2025 PQFlow Pro. All rights reserved.</p>
       </div>
       <div class="footer-col">
         <h4>Quick Links</h4>
         <ul>
-          <li><a href="#how-it-works">How It Works</a></li>
-          <li><a href="#features">Features</a></li>
-          <li><a href="../pages/admin.html">Admin</a></li>
+          <li><a href="../../index.html#how-it-works">How It Works</a></li>
+          <li><a href="../../index.html#features">Features</a></li>
+          <li><a href="../admin/index.html">Admin Panel</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -102,10 +102,14 @@
     </div>
   </footer>
 
-  <!-- JS Files -->
-  <script src="../scripts/utils.js"></script>
-  <script src="../scripts/auth.js"></script>
-  <script src="../scripts/i18n.js"></script>
-  <script src="../scripts/pwa.js"></script>
+  <!-- Load scripts in correct order -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  <script src="../../scripts/firestore.js"></script>
+  <script src="../../scripts/auth-guard.js"></script>
+  <script src="../../scripts/auth.js"></script>
+  <script src="../../scripts/i18n.js"></script>
+  <script src="../../scripts/pwa.js"></script>
 </body>
 </html>
