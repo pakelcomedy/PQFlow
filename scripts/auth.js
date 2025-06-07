@@ -1,185 +1,189 @@
-// File: scripts/auth.js
+// scripts/auth.js
+(function() {
+  // ————————————————————————————————
+  // INIT FIRESTORE & AUTH
+  // ————————————————————————————————
+  if (typeof initFirestore === 'function') initFirestore();
+  const auth = firebase.auth();
+  const db   = firebase.firestore();
 
-// ————————————————————————————————
-// Ensure Firestore is initialized (from firestore.js)
-if (typeof initFirestore === 'function') {
-  initFirestore();
-}
+  // ————————————————————————————————
+  // HELPER STATUS MESSAGE
+  // ————————————————————————————————
+  const show = window.showMessage || function(el, msg, type) {
+    el.textContent = msg;
+    el.classList.toggle('info',    type === 'info');
+    el.classList.toggle('success', type === 'success');
+    el.classList.toggle('error',   type === 'error');
+  };
 
-// Helper to show status messages
-const show = window.showMessage || function(el, msg, type) {
-  el.textContent = msg;
-  el.classList.remove('success', 'error', 'info');
-  el.classList.add(type);
-};
+  // ————————————————————————————————
+  // REGISTRATION: simpan org & buat akun
+  // ————————————————————————————————
+  (function initRegistration() {
+    const form  = document.getElementById('register-form');
+    const msgEl = document.getElementById('register-message');
+    if (!form || !msgEl) return;
 
-// ————————————————————————————————
-// REGISTRATION
-// ————————————————————————————————
-const regForm = document.getElementById('register-form');
-if (regForm) {
-  const msgEl = document.getElementById('register-message');
-  regForm.addEventListener('submit', async e => {
-    e.preventDefault();
-    const org   = document.getElementById('org-name').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const pw    = document.getElementById('password').value;
-    const cpw   = document.getElementById('confirm-password').value;
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      msgEl.textContent = '';
+      msgEl.className = 'status-message';
 
-    if (!org || !email || !pw || pw !== cpw) {
-      show(msgEl, 'Please fill all fields correctly.', 'error');
-      return;
-    }
+      const orgInp  = document.getElementById('org-name');
+      const email   = document.getElementById('email').value.trim();
+      const pw      = document.getElementById('password').value;
+      const cpw     = document.getElementById('confirm-password').value;
+      const org     = orgInp.value.trim();
 
-    try {
-      show(msgEl, 'Registering…', 'info');
-      const cred = await firebase.auth().createUserWithEmailAndPassword(email, pw);
-      await db.collection('admins').doc(cred.user.uid).set({
-        organization: org,
-        email,
-        role: 'admin',
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      show(msgEl, 'Success! Redirecting…', 'success');
-      setTimeout(() => location.href = 'index.html', 1500);
-    } catch (err) {
-      console.error(err);
-      show(msgEl, err.message, 'error');
-    }
-  });
-}
-
-// ————————————————————————————————
-// LOGIN
-// ————————————————————————————————
-const loginForm = document.getElementById('login-form');
-if (loginForm) {
-  const msgEl = document.getElementById('login-message');
-  const submitBtn = loginForm.querySelector('button[type="submit"]');
-
-  loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const email = document.getElementById('email').value.trim();
-    const pw = document.getElementById('password').value;
-
-    // Validasi sederhana
-    if (!email || !pw) {
-      show(msgEl, 'Email dan password wajib diisi.', 'error');
-      return;
-    }
-
-    // Nonaktifkan tombol agar tidak diklik berkali-kali
-    submitBtn.disabled = true;
-    show(msgEl, 'Sedang masuk…', 'info');
-
-    try {
-      await firebase.auth().signInWithEmailAndPassword(email, pw);
-      show(msgEl, 'Berhasil masuk! Mengalihkan…', 'success');
-      setTimeout(() => location.href = 'index.html', 1000);
-    } catch (err) {
-      console.error(err);
-
-      // Tangani error umum Firebase Auth
-      switch (err.code) {
-        case 'auth/invalid-email':
-          show(msgEl, 'Format email tidak valid.', 'error');
-          break;
-        case 'auth/user-not-found':
-          show(msgEl, 'Pengguna tidak ditemukan.', 'error');
-          break;
-        case 'auth/wrong-password':
-          show(msgEl, 'Password salah.', 'error');
-          break;
-        case 'auth/too-many-requests':
-          show(msgEl, 'Terlalu banyak percobaan login. Coba lagi nanti.', 'error');
-          break;
-        case 'auth/network-request-failed':
-          show(msgEl, 'Gagal terhubung ke server. Periksa koneksi Anda.', 'error');
-          break;
-        default:
-          show(msgEl, err.message || 'Terjadi kesalahan.', 'error');
+      if (!org || !email || !pw || pw !== cpw) {
+        return show(msgEl, 'Please fill all fields correctly.', 'error');
       }
-    } finally {
-      // Aktifkan kembali tombol setelah 3 detik (kecuali terlalu banyak request)
-      if (err?.code === 'auth/too-many-requests') {
-        setTimeout(() => (submitBtn.disabled = false), 3 * 60 * 1000); // 3 menit
-      } else {
-        setTimeout(() => (submitBtn.disabled = false), 2000);
+
+      try {
+        show(msgEl, 'Registering…', 'info');
+        // tandai untuk inisialisasi Firestore
+        sessionStorage.setItem('pendingOrg', org);
+        sessionStorage.removeItem('profileInited');
+
+        // buat user di Firebase Auth → otomatis login
+        await auth.createUserWithEmailAndPassword(email, pw);
+        show(msgEl, 'Account created! Finalizing…', 'info');
+
+        // tunggu onAuthStateChanged → redirect di sana
+      } catch (err) {
+        console.error('Registration Error:', err);
+        show(msgEl, err.message || 'Registration failed.', 'error');
+      }
+    });
+  })();
+
+  // ————————————————————————————————
+  // GLOBAL AUTH STATE HANDLER
+  // ————————————————————————————————
+  auth.onAuthStateChanged(async user => {
+    const path = location.pathname;
+    const onAuthPage  = /\/pages\/auth\//.test(path);
+    const onAdminPage = /\/pages\/admin\//.test(path);
+
+    // 1) Jika login & ada pendingOrg → inisialisasi profile sekali
+    const pendingOrg    = sessionStorage.getItem('pendingOrg');
+    const profileInited = sessionStorage.getItem('profileInited');
+
+    if (user && pendingOrg && !profileInited) {
+      try {
+        const uid = user.uid;
+        // tulis admin profile
+        await db.collection('admins').doc(uid).set({
+          organization: pendingOrg,
+          email:        user.email,
+          role:         'admin',
+          createdAt:    firebase.firestore.FieldValue.serverTimestamp()
+        });
+        // tulis default per-user settings
+        await db
+          .collection('users').doc(uid)
+          .collection('settings').doc('config')
+          .set({
+            systemName: pendingOrg,
+            hoursMode:  'custom',
+            openTime:   '08:00',
+            closeTime:  '17:00',
+            updatedAt:  firebase.firestore.FieldValue.serverTimestamp()
+          });
+        console.log('✅ Profile & settings initialized');
+
+        sessionStorage.setItem('profileInited', '1');
+        sessionStorage.removeItem('pendingOrg');
+
+        // langsung ke admin panel
+        return void (location.href = '/pages/admin/index.html');
+      } catch (err) {
+        console.error('Init profile failed:', err);
       }
     }
-  });
-}
 
-// ————————————————————————————————
-// FORGOT & RESET (Firebase built-in)
-// ————————————————————————————————
-const fpForm = document.getElementById('fp-form');
-if (fpForm) {
-  const msgEl   = document.getElementById('fp-message');
-  const emailEl = document.getElementById('fp-email');
-
-  fpForm.addEventListener('submit', async e => {
-    e.preventDefault();
-    const email = emailEl.value.trim();
-
-    if (!email) {
-      show(msgEl, 'Email wajib diisi.', 'error');
-      return;
+    // 2) Route guard (login/logout redirect)
+    if (user && onAuthPage) {
+      location.replace('/pages/admin/index.html');
+    } else if (!user && onAdminPage) {
+      location.replace('/pages/auth/login.html');
     }
+  });
 
-    try {
-      show(msgEl, 'Mengirim link reset…', 'info');
-      await firebase.auth().sendPasswordResetEmail(email);
-      show(msgEl, 'Link reset terkirim! Cek email Anda.', 'success');
-      setTimeout(() => location.href = 'login.html', 2000);
-    } catch (err) {
-      console.error(err);
-      switch (err.code) {
-        case 'auth/invalid-email':
-          show(msgEl, 'Format email tidak valid.', 'error');
-          break;
-        case 'auth/user-not-found':
-          show(msgEl, 'Pengguna tidak ditemukan.', 'error');
-          break;
-        case 'auth/network-request-failed':
-          show(msgEl, 'Gagal terhubung. Periksa koneksi Anda.', 'error');
-          break;
-        default:
-          show(msgEl, err.message || 'Terjadi kesalahan.', 'error');
+  // ————————————————————————————————
+  // LOGIN
+  // ————————————————————————————————
+  (function initLogin() {
+    const form  = document.getElementById('login-form');
+    const msgEl = document.getElementById('login-message');
+    if (!form || !msgEl) return;
+
+    const btn = form.querySelector('button[type="submit"]');
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const email = form['email'].value.trim();
+      const pw    = form['password'].value;
+      if (!email || !pw) {
+        return show(msgEl, 'Email dan password wajib diisi.', 'error');
       }
-    }
-  });
-}
+      btn.disabled = true;
+      show(msgEl, 'Logging in…', 'info');
+      try {
+        await auth.signInWithEmailAndPassword(email, pw);
+        show(msgEl, 'Login successful! Redirecting…', 'success');
+      } catch (err) {
+        console.error('Login Error:', err);
+        show(msgEl, err.message || 'Login failed.', 'error');
+      } finally {
+        setTimeout(() => btn.disabled = false, 2000);
+      }
+    });
+  })();
 
-// ————————————————————————————————
-// GLOBAL REDIRECTS
-// ————————————————————————————————
-firebase.auth().onAuthStateChanged(u => {
-  const p       = location.pathname;
-  const onAuth  = /\/pages\/auth\//.test(p);
-  const onAdmin = /\/pages\/admin\//.test(p);
+  // ————————————————————————————————
+  // FORGOT & RESET
+  // ————————————————————————————————
+  (function initForgot() {
+    const form  = document.getElementById('fp-form');
+    const msgEl = document.getElementById('fp-message');
+    if (!form || !msgEl) return;
 
-  if (u && onAuth)        location.replace('../admin/index.html');
-  else if (!u && onAdmin) location.replace('../auth/login.html');
-});
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const email = form['fp-email'].value.trim();
+      if (!email) return show(msgEl, 'Email wajib diisi.', 'error');
 
-// ————————————————————————————————
-// LOGOUT HANDLER
-// ————————————————————————————————
-const logoutBtn = document.getElementById('logout-btn');
-if (logoutBtn) {
-  logoutBtn.addEventListener('click', async () => {
-    try {
-      logoutBtn.disabled = true;
-      await firebase.auth().signOut();
-      // optional: clear localStorage/session data here
-      window.location.href = '../auth/login.html';
-    } catch (err) {
-      console.error('Logout Error:', err);
-      const msgEl = document.querySelector('.status-message');
-      if (msgEl) show(msgEl, 'Logout failed. Try again.', 'error');
-      logoutBtn.disabled = false;
-    }
-  });
-}
+      try {
+        show(msgEl, 'Sending reset link…', 'info');
+        await auth.sendPasswordResetEmail(email);
+        show(msgEl, 'Reset link sent! Check your inbox.', 'success');
+        setTimeout(() => location.href = 'login.html', 1500);
+      } catch (err) {
+        console.error('Reset Error:', err);
+        show(msgEl, err.message || 'Reset failed.', 'error');
+      }
+    });
+  })();
+
+  // ————————————————————————————————
+  // LOGOUT
+  // ————————————————————————————————
+  (function initLogout() {
+    const btn = document.getElementById('logout-btn');
+    if (!btn) return;
+
+    btn.addEventListener('click', async () => {
+      try {
+        btn.disabled = true;
+        await auth.signOut();
+        location.href = '/pages/auth/login.html';
+      } catch (err) {
+        console.error('Logout Error:', err);
+        const msgEl = document.querySelector('.status-message');
+        show(msgEl, 'Logout failed.', 'error');
+        btn.disabled = false;
+      }
+    });
+  })();
+})();

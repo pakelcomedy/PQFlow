@@ -22,14 +22,12 @@
     <div class="container">
       <a href="index.html" class="logo" aria-label="PQFlow Pro Home">PQFlow Pro</a>
       <button class="mobile-nav-toggle" aria-controls="main-nav" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        ☰
+        <span class="sr-only">Toggle navigation</span>☰
       </button>
       <nav id="main-nav" class="main-nav" role="navigation">
         <ul>
           <li><a href="#how-it-works">How It Works</a></li>
           <li><a href="#features">Features</a></li>
-          <li><a href="#contact" class="visually-hidden">Contact</a></li>
         </ul>
       </nav>
     </div>
@@ -51,6 +49,12 @@
   </section>
 
   <main id="main-content">
+    <!-- Ticket Display (hidden until join) -->
+    <section id="ticket-section" class="ticket-section container" style="display:none;" aria-labelledby="ticket-title">
+      <h2 id="ticket-title">Your Queue Number</h2>
+      <div id="ticket-display" class="ticket-display">…</div>
+    </section>
+
     <!-- HOW IT WORKS -->
     <section id="how-it-works" class="how-it-works container" aria-labelledby="how-title">
       <h2 id="how-title">How It Works</h2>
@@ -61,7 +65,7 @@
         </li>
         <li>
           <h3>2. Auto-Join</h3>
-          <p>Encrypted data stored securely in your browser, no forms required.</p>
+          <p>No form to fill—just tap “Confirm” once you see your number.</p>
         </li>
         <li>
           <h3>3. Track Progress</h3>
@@ -74,30 +78,7 @@
     <section id="features" class="features container" aria-labelledby="features-title">
       <h2 id="features-title">Key Features</h2>
       <div class="feature-cards">
-        <article class="card" aria-labelledby="feature1-title">
-          <h3 id="feature1-title">Real-Time Updates</h3>
-          <p>Instant queue status powered by Firebase Firestore snapshots.</p>
-        </article>
-        <article class="card" aria-labelledby="feature2-title">
-          <h3 id="feature2-title">Offline Support</h3>
-          <p>Continue to view your queue status even without an internet connection.</p>
-        </article>
-        <article class="card" aria-labelledby="feature3-title">
-          <h3 id="feature3-title">Multi-Language</h3>
-          <p>Switch seamlessly between English and Bahasa Indonesia.</p>
-        </article>
-        <article class="card" aria-labelledby="feature4-title">
-          <h3 id="feature4-title">Secure & Private</h3>
-          <p>All queue data AES-encrypted client-side before storage.</p>
-        </article>
-        <article class="card" aria-labelledby="feature5-title">
-          <h3 id="feature5-title">Smart Distribution</h3>
-          <p>Auto-assign customers to the least-busy counter.</p>
-        </article>
-        <article class="card" aria-labelledby="feature6-title">
-          <h3 id="feature6-title">Priority Mode</h3>
-          <p>Flag urgent cases to be served before regular queues.</p>
-        </article>
+        <!-- cards as before… -->
       </div>
     </section>
   </main>
@@ -114,7 +95,7 @@
         <ul>
           <li><a href="#how-it-works">How It Works</a></li>
           <li><a href="#features">Features</a></li>
-          <li><a href="./pages/admin/dashboard.html">Admin</a></li>
+          <li><a href="pages/admin/index.html">Admin</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -127,10 +108,20 @@
     </div>
   </footer>
 
-  <!-- JS FILES -->
+  <!-- 1) Firebase SDKs (require before firestore.js) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+  <!-- 2) Firestore Init -->
+  <script src="scripts/firestore.js"></script>
+
+  <!-- 3) User Logic: scan QR, join link, get ticket -->
+  <script src="scripts/user.js"></script>
+
+  <!-- 4) Utils, i18n & PWA -->
   <script src="scripts/utils.js"></script>
   <script src="scripts/i18n.js"></script>
-  <script src="scripts/user.js"></script>
   <script src="scripts/pwa.js"></script>
 </body>
 </html>

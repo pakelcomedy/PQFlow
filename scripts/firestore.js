@@ -1,3 +1,7 @@
+// scripts/firestore.js
+// ————————————————————————————————
+// FIREBASE INITIALIZATION
+// ————————————————————————————————
 const firebaseConfig = {
   apiKey: "AIzaSyB0hy4PSyq6P_0g7sZLN6cQKvRk6QqtQ7w",
   authDomain: "pqflow.firebaseapp.com",
@@ -8,15 +12,20 @@ const firebaseConfig = {
   measurementId: "G-16TT21TJ73"
 };
 
-// Initialize Firebase App
-firebase.initializeApp(firebaseConfig);
+// Init only if not already initialized
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+  console.log("✅ Firebase App initialized.");
+} else {
+  console.log("ℹ️ Firebase already initialized.");
+}
 
-// Initialize Analytics (optional)
+// Optional: Analytics
 if (firebase.analytics) {
   firebase.analytics();
 }
 
-// Initialize Firestore & Auth
+// Init Firestore & Auth
 const db   = firebase.firestore();
 const auth = firebase.auth();
 
@@ -25,5 +34,12 @@ window.firebase = firebase;
 window.db       = db;
 window.auth     = auth;
 
-// Ready!
-console.log("✅ Firestore initialized, Auth initialized.");
+// Optional helper: initFirestore (used in auth.js/settings.js)
+function initFirestore() {
+  if (!window.db) {
+    window.db = firebase.firestore();
+  }
+}
+window.initFirestore = initFirestore;
+
+console.log("✅ Firestore & Auth initialized.");

@@ -28,24 +28,22 @@
   <main id="main-content" class="login-page">
     <section class="login-section container" aria-labelledby="register-title">
       <h1 id="register-title">Admin Registration</h1>
-      <p class="login-intro">Please register your organization to manage queues.</p>
-
-      <!-- Error / Status Message -->
       <div id="register-message" class="status-message" role="alert" aria-live="assertive"></div>
 
-      <!-- Registration Form -->
       <form id="register-form" novalidate>
+        <!-- Organization Name -->
         <div class="form-group">
           <label for="org-name">Organization Name</label>
           <input
             type="text"
             id="org-name"
-            name="organization"
+            name="org-name"
             placeholder="e.g. RS Sutomo"
             required
             autocomplete="organization" />
         </div>
 
+        <!-- Email -->
         <div class="form-group">
           <label for="email">Email Address</label>
           <input
@@ -57,6 +55,7 @@
             autocomplete="username" />
         </div>
 
+        <!-- Password -->
         <div class="form-group">
           <label for="password">Password</label>
           <input
@@ -68,6 +67,7 @@
             autocomplete="new-password" />
         </div>
 
+        <!-- Confirm Password -->
         <div class="form-group">
           <label for="confirm-password">Confirm Password</label>
           <input
@@ -79,6 +79,7 @@
             autocomplete="new-password" />
         </div>
 
+        <!-- Submit -->
         <div class="form-actions">
           <button type="submit" class="btn btn-primary">Register</button>
         </div>
