@@ -1,0 +1,226 @@
+/* ==========================================================================
+   Admin Dashboard Styles
+   File: styles/admin/dashboard.css
+   ========================================================================== */
+
+/* -- 1. Variables & Base -- */
+:root {
+  --admin-bg: #f7f9fc;
+  --admin-white: #ffffff;
+  --admin-blue: #1e40af;
+  --admin-blue-light: #2673e6;
+  --admin-gray-200: #e5e7eb;
+  --admin-gray-300: #cbd5e1;
+  --admin-gray-500: #6b7280;
+  --radius-sm: 0.5rem;
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --transition-fast: 0.2s ease-in-out;
+  --bp-md: 768px;
+}
+
+/* Scoped box-sizing */
+.dashboard-content,
+.dashboard-content * {
+  box-sizing: border-box;
+}
+
+/* -- 2. Layout -- */
+.dashboard-layout {
+  display: flex;
+  background: var(--admin-bg);
+  min-height: 100vh;
+}
+
+/* -- 3. Sidebar -- */
+.sidebar {
+  width: 260px;
+  background: var(--admin-white);
+  border-right: 1px solid var(--admin-gray-200);
+  padding: var(--spacing-lg) 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  transform: translateX(0);
+  transition: transform var(--transition-fast);
+  z-index: 100;
+}
+.sidebar.open {
+  transform: translateX(0);
+}
+.sidebar-menu {
+  list-style: none;
+  margin: 0;
+  padding: 0 var(--spacing-md);
+}
+.sidebar-menu li + li {
+  margin-top: var(--spacing-sm);
+}
+.sidebar-menu a {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  color: var(--admin-gray-500);
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+.sidebar-menu a:hover,
+.sidebar-menu a:focus {
+  background: var(--admin-gray-200);
+  color: var(--admin-blue);
+}
+.sidebar-menu a.active {
+  background: var(--admin-blue-light);
+  color: var(--admin-white);
+}
+
+/* -- 4. Main Content -- */
+.dashboard-content {
+  flex: 1;
+  padding: var(--spacing-lg);
+  overflow-x: hidden;
+}
+
+/* -- 5. Metrics Grid -- */
+.metrics-grid {
+  display: grid;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+@media (min-width: var(--bp-md)) {
+  .metrics-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+.metric-card {
+  background: var(--admin-white);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  text-align: center;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+.metric-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.metric-card h3 {
+  margin-bottom: var(--spacing-xs);
+  font-size: 1rem;
+  color: var(--admin-gray-500);
+}
+.metric-card p {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--admin-blue);
+  margin: 0;
+}
+
+/* -- 6. Charts Section -- */
+.charts-section {
+  display: grid;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+@media (min-width: var(--bp-md)) {
+  .charts-section {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.chart-card {
+  background: var(--admin-white);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+}
+.chart-card h2 {
+  margin-bottom: var(--spacing-sm);
+  font-size: 1.25rem;
+  color: var(--admin-gray-500);
+}
+.chart-card canvas {
+  flex: 1;
+  max-height: 280px;
+}
+
+/* -- 7. Table Section -- */
+.table-section h2 {
+  margin-bottom: var(--spacing-md);
+  font-size: 1.5rem;
+  color: var(--admin-gray-500);
+}
+.table-wrapper {
+  background: var(--admin-white);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  overflow-x: auto;
+}
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.data-table th,
+.data-table td {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-bottom: 1px solid var(--admin-gray-200);
+  font-size: 0.95rem;
+  text-align: left;
+}
+.data-table thead {
+  background: var(--admin-blue);
+  color: var(--admin-white);
+}
+.data-table tbody tr:hover {
+  background: var(--admin-bg);
+}
+.data-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* -- 8. Responsive Mobile -- */
+@media (max-width: var(--bp-md)) {
+  .sidebar {
+    position: fixed;
+    top: 0; left: -100%;
+    width: 220px;
+    transform: translateX(-100%);
+  }
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  .mobile-nav-toggle {
+    display: block;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--admin-gray-500);
+    cursor: pointer;
+  }
+  .dashboard-content {
+    padding: var(--spacing-md);
+  }
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .charts-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* -- 9. Visually Hidden -- */
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}

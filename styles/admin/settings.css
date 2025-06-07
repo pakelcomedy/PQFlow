@@ -1,0 +1,204 @@
+/* ==========================================================================
+   Admin Settings Styles
+   File: styles/admin/settings.css
+   ========================================================================== */
+
+/* 1. Import shared admin variables & base layout */
+@import "./dashboard.css";
+
+/* 2. Scoped box-sizing */
+#main-settings,
+#main-settings * {
+  box-sizing: border-box;
+}
+
+/* 3. Settings Sections */
+.settings-section {
+  background: var(--admin-white);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  margin-bottom: var(--spacing-lg);
+}
+.settings-section h2 {
+  font-size: 1.25rem;
+  color: var(--admin-gray-500);
+  margin-bottom: var(--spacing-sm);
+  font-weight: 600;
+}
+
+/* 4. Form Groups */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--spacing-md);
+}
+.form-group label {
+  font-weight: 500;
+  color: var(--admin-gray-500);
+  margin-bottom: var(--spacing-xs);
+}
+.form-group input[type="text"],
+.form-group input[type="time"] {
+  padding: var(--spacing-sm);
+  border: 1px solid var(--admin-gray-300);
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+.form-group input:focus {
+  border-color: var(--admin-blue);
+  box-shadow: 0 0 0 3px rgba(30,64,175,0.2);
+  outline: none;
+}
+
+/* 5. Opening Hours Grid */
+.hours-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md);
+}
+@media (max-width: var(--bp-md)) {
+  .hours-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 6. Services & Counters List */
+.list-group {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.service-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) 0;
+  border-bottom: 1px solid var(--admin-gray-200);
+}
+.service-item:last-child {
+  border-bottom: none;
+}
+.service-item input {
+  flex: 1;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: 1px solid var(--admin-gray-300);
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+}
+.service-item button.remove-service {
+  background: transparent;
+  border: none;
+  color: var(--admin-gray-500);
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+.service-item button.remove-service:hover {
+  color: var(--admin-blue);
+}
+#add-service-btn {
+  margin-top: var(--spacing-sm);
+  padding: var(--spacing-xs) var(--spacing-lg);
+  font-size: 0.95rem;
+  color: var(--admin-blue);
+  border: 1px solid var(--admin-blue);
+  background: transparent;
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+#add-service-btn:hover {
+  background: var(--admin-blue);
+  color: var(--admin-white);
+}
+
+/* 7. Priority Options */
+#enable-priority {
+  margin-right: var(--spacing-xs);
+  accent-color: var(--admin-blue);
+}
+.form-group input[type="checkbox"] {
+  transform: scale(1.2);
+}
+#priority-label {
+  margin-top: var(--spacing-xs);
+  padding: var(--spacing-sm);
+  border: 1px solid var(--admin-gray-300);
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+#priority-label:focus {
+  border-color: var(--admin-blue);
+  box-shadow: 0 0 0 3px rgba(30,64,175,0.2);
+  outline: none;
+}
+#enable-priority:checked ~ label[for="priority-label"] + #priority-label,
+#enable-priority:checked ~ .form-group #priority-label {
+  pointer-events: auto;
+  opacity: 1;
+}
+#priority-label[disabled] {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* 8. Settings Actions */
+.settings-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-lg);
+}
+#save-settings-btn {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-size: 1rem;
+  background: var(--admin-blue);
+  color: var(--admin-white);
+  border: none;
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+#save-settings-btn:hover {
+  background: var(--admin-blue-light);
+  transform: translateY(-2px);
+}
+#reset-settings-btn {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-size: 1rem;
+  background: transparent;
+  color: var(--admin-blue);
+  border: 1px solid var(--admin-blue);
+  border-radius: var(--radius-sm);
+}
+#reset-settings-btn:hover {
+  background: var(--admin-blue);
+  color: var(--admin-white);
+  transform: translateY(-2px);
+}
+
+/* 9. Responsive */
+@media (max-width: var(--bp-md)) {
+  .settings-section {
+    padding: var(--spacing-md);
+  }
+  .settings-actions {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  #reset-settings-btn {
+    width: 100%;
+  }
+}
+
+/* 10. Visually Hidden Utility */
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}

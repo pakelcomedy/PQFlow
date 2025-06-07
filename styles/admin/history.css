@@ -1,0 +1,93 @@
+/* ==========================================================================
+   Admin History Styles
+   File: styles/admin/history.css
+   ========================================================================== */
+
+/* ----------------------------------------
+   1. Variables & Base (reuse dashboard vars)
+   ---------------------------------------- */
+@import "./dashboard.css"; /* ensure base vars and layouts are available */
+
+/* ----------------------------------------
+   2. Scoped box-sizing
+   ---------------------------------------- */
+#main-history,
+#main-history * {
+  box-sizing: border-box;
+}
+
+/* ----------------------------------------
+   3. Date Filter
+   ---------------------------------------- */
+.date-filter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+}
+.date-filter label {
+  font-weight: 600;
+  color: var(--admin-gray-500);
+}
+.input-date {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: 1px solid var(--admin-gray-300);
+  border-radius: var(--radius-sm);
+  background: var(--admin-white);
+  font-size: 1rem;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+.input-date:focus {
+  border-color: var(--admin-blue);
+  box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.2);
+  outline: none;
+}
+#filter-btn {
+  margin-left: auto;
+}
+
+/* ----------------------------------------
+   4. History Table
+   ---------------------------------------- */
+.history-table .table-wrapper {
+  background: var(--admin-white);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  overflow-x: auto;
+}
+.history-table .data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.history-table th,
+.history-table td {
+  padding: var(--spacing-sm) var(--spacing-md);
+  text-align: left;
+  border-bottom: 1px solid var(--admin-gray-200);
+  font-size: 0.95rem;
+}
+.history-table thead {
+  background: var(--admin-blue);
+  color: var(--admin-white);
+}
+.history-table tbody tr:hover {
+  background: var(--admin-bg);
+}
+.history-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ----------------------------------------
+   5. Responsive
+   ---------------------------------------- */
+@media (max-width: var(--bp-md)) {
+  .date-filter {
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+  #filter-btn {
+    margin-left: 0;
+    width: 100%;
+  }
+}

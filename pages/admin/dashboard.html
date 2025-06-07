@@ -6,51 +6,52 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard — PQFlow Pro</title>
 
-  <!-- PWA Manifest -->
-  <link rel="manifest" href="../manifest.json" />
-  <!-- Favicon -->
-  <link rel="icon" href="../favicon.ico" />
+  <!-- PWA Manifest & Favicon -->
+  <link rel="manifest" href="../../manifest.json" />
+  <link rel="icon" href="../../favicon.ico" />
+
   <!-- Global Styles -->
-  <link rel="stylesheet" href="../styles/style.css" />
+  <link rel="stylesheet" href="../../styles/style.css" />
+  <!-- Admin-specific Styles -->
+  <link rel="stylesheet" href="../../styles/admin/dashboard.css" />
 </head>
 <body>
   <!-- Skip Link -->
   <a href="#main-dashboard" class="skip-link">Skip to main dashboard</a>
 
-  <!-- HEADER -->
+  <!-- HEADER
   <header class="site-header" role="banner">
-    <div class="container">
-      <a href="../index.html" class="logo" aria-label="PQFlow Pro Home">PQFlow Pro</a>
+    <div class="container header-grid">
+      <a href="../../index.html" class="logo" aria-label="PQFlow Pro Home">PQFlow Pro</a>
       <button class="mobile-nav-toggle" aria-controls="sidebar" aria-expanded="false">
-        <span class="sr-only">Toggle sidebar</span>
-        ☰
+        <span class="sr-only">Toggle sidebar</span>☰
       </button>
       <nav class="main-nav" role="navigation">
         <ul>
-          <li><a href="../index.html">Home</a></li>
-          <li><a href="admin.html">Admin Panel</a></li>
+          <li><a href="../../index.html">Home</a></li>
+          <li><a href="index.html">Admin Panel</a></li>
           <li><a href="dashboard.html" class="active">Dashboard</a></li>
           <li><button id="logout-btn" class="btn btn-outline">Logout</button></li>
         </ul>
       </nav>
     </div>
-  </header>
+  </header> -->
 
   <!-- LAYOUT: SIDEBAR + MAIN -->
   <div class="dashboard-layout">
     <!-- SIDEBAR -->
     <aside id="sidebar" class="sidebar" role="navigation">
       <ul class="sidebar-menu">
-        <li><a href="admin.html"><span class="icon">🗂️</span> Manage Queues</a></li>
-        <li><a href="dashboard.html" class="active"><span class="icon">📊</span> Overview</a></li>
-        <li><a href="history.html"><span class="icon">📁</span> History</a></li>
-        <li><a href="export.html"><span class="icon">⬇️</span> Export Data</a></li>
-        <li><a href="settings.html"><span class="icon">⚙️</span> Settings</a></li>
+        <li><a href="index.html"><span aria-hidden="true">🗂️</span> Manage Queues</a></li>
+        <li><a href="dashboard.html" class="active"><span aria-hidden="true">📊</span> Overview</a></li>
+        <li><a href="history.html"><span aria-hidden="true">📁</span> History</a></li>
+        <li><a href="export.html"><span aria-hidden="true">⬇️</span> Export Data</a></li>
+        <li><a href="settings.html"><span aria-hidden="true">⚙️</span> Settings</a></li>
       </ul>
     </aside>
 
     <!-- MAIN CONTENT -->
-    <main id="main-dashboard" class="dashboard-content">
+    <main id="main-dashboard" class="dashboard-content" role="main">
       <div class="container">
         <h1>Dashboard Overview</h1>
 
@@ -78,31 +79,36 @@
         <section class="charts-section">
           <div class="chart-card">
             <h2>Daily Queue Volume</h2>
-            <canvas id="dailyQueueChart"></canvas>
+            <canvas id="dailyQueueChart" aria-label="Daily queue volume chart"></canvas>
           </div>
           <div class="chart-card">
             <h2>Branch Comparison</h2>
-            <canvas id="branchComparisonChart"></canvas>
+            <canvas id="branchComparisonChart" aria-label="Branch comparison chart"></canvas>
           </div>
         </section>
 
         <!-- Recent Activity Table -->
         <section class="table-section">
           <h2>Recent Queue Activity</h2>
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Time</th>
-                <th>Branch</th>
-                <th>Service</th>
-                <th>Queue #</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody id="recent-activity-body">
-              <!-- JS injects rows here -->
-            </tbody>
-          </table>
+          <div class="table-wrapper">
+            <table class="data-table" aria-describedby="recent-activity-desc">
+              <caption id="recent-activity-desc" class="visually-hidden">
+                Recent queue activity showing timestamp, branch, service, queue number, and status.
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Time</th>
+                  <th scope="col">Branch</th>
+                  <th scope="col">Service</th>
+                  <th scope="col">Queue #</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody id="recent-activity-body">
+                <!-- JS injects rows here -->
+              </tbody>
+            </table>
+          </div>
         </section>
       </div>
     </main>
@@ -112,13 +118,13 @@
   <footer class="site-footer" role="contentinfo">
     <div class="container footer-grid">
       <div class="footer-col">
-        <a href="../index.html" class="logo">PQFlow Pro</a>
+        <a href="../../index.html" class="logo">PQFlow Pro</a>
         <p>&copy; 2025 PQFlow Pro. All rights reserved.</p>
       </div>
       <div class="footer-col">
         <h4>Quick Links</h4>
         <ul>
-          <li><a href="admin.html">Manage Queues</a></li>
+          <li><a href="index.html">Manage Queues</a></li>
           <li><a href="history.html">History</a></li>
           <li><a href="settings.html">Settings</a></li>
         </ul>
@@ -134,10 +140,19 @@
   </footer>
 
   <!-- JS Files -->
-  <script src="../scripts/utils.js"></script>
-  <script src="../scripts/firestore.js"></script>
-  <script src="../scripts/admin.js"></script>
-  <script src="../scripts/dashboard.js"></script>
-  <script src="../scripts/pwa.js"></script>
+  <script src="../../scripts/utils.js"></script>
+  <script src="../../scripts/firestore.js"></script>
+  <script src="../../scripts/admin/dashboard.js"></script>
+  <script src="../../scripts/pwa.js"></script>
+  <script>
+    // Sidebar toggle (external script could also handle this)
+    const toggleBtn = document.querySelector('.mobile-nav-toggle');
+    const sidebar = document.getElementById('sidebar');
+    toggleBtn.addEventListener('click', () => {
+      const expanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+      toggleBtn.setAttribute('aria-expanded', !expanded);
+      sidebar.classList.toggle('open');
+    });
+  </script>
 </body>
 </html>

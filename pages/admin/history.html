@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>History — PQFlow Pro Admin</title>
+
+  <!-- PWA Manifest & Favicon -->
+  <link rel="manifest" href="../../manifest.json" />
+  <link rel="icon" href="../../favicon.ico" />
+
+  <!-- Global Styles -->
+  <link rel="stylesheet" href="../../styles/style.css" />
+  <!-- Admin-specific Styles -->
+  <link rel="stylesheet" href="../../styles/admin/dashboard.css" />
+  <link rel="stylesheet" href="../../styles/admin/history.css" />
+</head>
+<body>
+  <!-- Skip Link -->
+  <a href="#main-history" class="skip-link">Skip to history panel</a>
+
+  <!-- HEADER -->
+  <!-- <header class="site-header" role="banner">
+    <div class="container header-grid">
+      <a href="../../index.html" class="logo" aria-label="PQFlow Pro Home">PQFlow Pro</a>
+      <button class="mobile-nav-toggle" aria-controls="sidebar" aria-expanded="false">
+        <span class="sr-only">Toggle sidebar</span>☰
+      </button>
+      <nav class="main-nav" role="navigation">
+        <ul>
+          <li><a href="../../index.html">Home</a></li>
+          <li><a href="index.html">Admin Panel</a></li>
+          <li><a href="dashboard.html">Dashboard</a></li>
+          <li><a href="history.html" class="active">History</a></li>
+          <li><button id="logout-btn" class="btn btn-outline">Logout</button></li>
+        </ul>
+      </nav>
+    </div>
+  </header> -->
+
+  <!-- LAYOUT -->
+  <div class="dashboard-layout">
+    <!-- SIDEBAR -->
+    <aside id="sidebar" class="sidebar" role="navigation">
+      <ul class="sidebar-menu">
+        <li><a href="index.html"><span aria-hidden="true">🗂️</span> Manage Queues</a></li>
+        <li><a href="dashboard.html"><span aria-hidden="true">📊</span> Overview</a></li>
+        <li><a href="history.html" class="active"><span aria-hidden="true">📁</span> History</a></li>
+        <li><a href="export.html"><span aria-hidden="true">⬇️</span> Export Data</a></li>
+        <li><a href="settings.html"><span aria-hidden="true">⚙️</span> Settings</a></li>
+      </ul>
+    </aside>
+
+    <!-- MAIN HISTORY CONTENT -->
+    <main id="main-history" class="dashboard-content" role="main">
+      <div class="container">
+        <h1>Queue History</h1>
+
+        <!-- Date Filter -->
+        <section class="date-filter form-group">
+          <label for="history-date-start">From:</label>
+          <input type="date" id="history-date-start" class="input-date" />
+          <label for="history-date-end" class="ml-sm">To:</label>
+          <input type="date" id="history-date-end" class="input-date" />
+          <button id="filter-btn" class="btn btn-primary ml-sm">Filter</button>
+        </section>
+
+        <!-- History Table -->
+        <section class="history-table">
+          <div class="table-wrapper">
+            <table class="data-table" aria-describedby="history-desc">
+              <caption id="history-desc" class="visually-hidden">
+                Queue history with timestamp, branch, service, queue number, status, and source.
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Timestamp</th>
+                  <th scope="col">Branch</th>
+                  <th scope="col">Service</th>
+                  <th scope="col">Queue #</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Source</th>
+                </tr>
+              </thead>
+              <tbody id="history-body">
+                <!-- JS injects history rows -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-grid">
+      <div class="footer-col">
+        <a href="../../index.html" class="logo">PQFlow Pro</a>
+        <p>&copy; 2025 PQFlow Pro. All rights reserved.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Manage Queues</a></li>
+          <li><a href="dashboard.html">Overview</a></li>
+          <li><a href="settings.html">Settings</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Language</h4>
+        <div class="footer-actions">
+          <button id="lang-en" class="lang-btn active" aria-pressed="true">EN</button>
+          <button id="lang-id" class="lang-btn" aria-pressed="false">ID</button>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JS Files -->
+  <script src="../../scripts/utils.js"></script>
+  <script src="../../scripts/firestore.js"></script>
+  <script src="../../scripts/admin/history.js"></script>
+  <script src="../../scripts/pwa.js"></script>
+  <script>
+    // Sidebar toggle
+    const toggleBtn = document.querySelector('.mobile-nav-toggle');
+    const sidebar = document.getElementById('sidebar');
+    toggleBtn.addEventListener('click', () => {
+      const expanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+      toggleBtn.setAttribute('aria-expanded', !expanded);
+      sidebar.classList.toggle('open');
+    });
+  </script>
+</body>
+</html>

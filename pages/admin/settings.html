@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Settings — PQFlow Pro Admin</title>
+
+  <!-- PWA Manifest & Favicon -->
+  <link rel="manifest" href="../../manifest.json" />
+  <link rel="icon" href="../../favicon.ico" />
+
+  <!-- Global Styles -->
+  <link rel="stylesheet" href="../../styles/style.css" />
+  <!-- Admin-specific Styles -->
+  <link rel="stylesheet" href="../../styles/admin/dashboard.css" />
+  <link rel="stylesheet" href="../../styles/admin/settings.css" />
+</head>
+<body>
+  <!-- Skip Link -->
+  <a href="#main-settings" class="skip-link">Skip to settings panel</a>
+
+  <!-- HEADER -->
+  <!-- <header class="site-header" role="banner">
+    <div class="container header-grid">
+      <a href="../../index.html" class="logo" aria-label="PQFlow Pro Home">PQFlow Pro</a>
+      <button class="mobile-nav-toggle" aria-controls="sidebar" aria-expanded="false">
+        <span class="sr-only">Toggle sidebar</span>☰
+      </button>
+      <nav class="main-nav" role="navigation">
+        <ul>
+          <li><a href="../../index.html">Home</a></li>
+          <li><a href="index.html">Admin Panel</a></li>
+          <li><a href="dashboard.html">Dashboard</a></li>
+          <li><a href="history.html">History</a></li>
+          <li><a href="export.html">Export Data</a></li>
+          <li><a href="settings.html" class="active">Settings</a></li>
+          <li><button id="logout-btn" class="btn btn-outline">Logout</button></li>
+        </ul>
+      </nav>
+    </div>
+  </header> -->
+
+  <!-- LAYOUT -->
+  <div class="dashboard-layout">
+    <!-- SIDEBAR -->
+    <aside id="sidebar" class="sidebar" role="navigation">
+      <ul class="sidebar-menu">
+        <li><a href="index.html"><span aria-hidden="true">🗂️</span> Manage Queues</a></li>
+        <li><a href="dashboard.html"><span aria-hidden="true">📊</span> Overview</a></li>
+        <li><a href="history.html"><span aria-hidden="true">📁</span> History</a></li>
+        <li><a href="export.html"><span aria-hidden="true">⬇️</span> Export Data</a></li>
+        <li><a href="settings.html" class="active"><span aria-hidden="true">⚙️</span> Settings</a></li>
+      </ul>
+    </aside>
+
+    <!-- MAIN SETTINGS CONTENT -->
+    <main id="main-settings" class="dashboard-content" role="main">
+      <div class="container">
+        <h1>Settings</h1>
+
+        <!-- Branch Info -->
+        <section class="settings-section">
+          <h2>Branch Details</h2>
+          <div class="form-group">
+            <label for="branch-name">Branch Name</label>
+            <input type="text" id="branch-name" placeholder="e.g. RS Jakarta" />
+          </div>
+          <div class="form-group">
+            <label for="branch-address">Address</label>
+            <input type="text" id="branch-address" placeholder="e.g. Jl. Sudirman No.1" />
+          </div>
+        </section>
+
+        <!-- Opening Hours -->
+        <section class="settings-section">
+          <h2>Opening Hours</h2>
+          <div class="hours-grid">
+            <div class="form-group">
+              <label for="open-time">Open Time</label>
+              <input type="time" id="open-time" />
+            </div>
+            <div class="form-group">
+              <label for="close-time">Close Time</label>
+              <input type="time" id="close-time" />
+            </div>
+          </div>
+        </section>
+
+        <!-- Services & Counters -->
+        <section class="settings-section">
+          <h2>Services & Counters</h2>
+          <div id="services-list" class="list-group">
+            <!-- JS injects existing services -->
+          </div>
+          <button id="add-service-btn" class="btn btn-outline mt-sm">+ Add Service</button>
+        </section>
+
+        <!-- Priority Settings -->
+        <section class="settings-section">
+          <h2>Priority Options</h2>
+          <div class="form-group">
+            <label>
+              <input type="checkbox" id="enable-priority" />
+              Enable Priority Queue
+            </label>
+          </div>
+          <div class="form-group">
+            <label for="priority-label">Priority Label</label>
+            <input type="text" id="priority-label" placeholder="e.g. Emergency" disabled />
+          </div>
+        </section>
+
+        <!-- Save / Reset Actions -->
+        <section class="settings-actions form-group mt-lg">
+          <button id="save-settings-btn" class="btn btn-primary">Save Settings</button>
+          <button id="reset-settings-btn" class="btn btn-outline ml-sm">Reset to Defaults</button>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-grid">
+      <div class="footer-col">
+        <a href="../../index.html" class="logo">PQFlow Pro</a>
+        <p>&copy; 2025 PQFlow Pro. All rights reserved.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Manage Queues</a></li>
+          <li><a href="dashboard.html">Overview</a></li>
+          <li><a href="history.html">History</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Language</h4>
+        <div class="footer-actions">
+          <button id="lang-en" class="lang-btn active" aria-pressed="true">EN</button>
+          <button id="lang-id" class="lang-btn" aria-pressed="false">ID</button>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JS Files -->
+  <script src="../../scripts/utils.js"></script>
+  <script src="../../scripts/firestore.js"></script>
+  <script src="../../scripts/admin/settings.js"></script>
+  <script src="../../scripts/pwa.js"></script>
+  <script>
+    // Mobile sidebar toggle
+    const toggleBtn = document.querySelector('.mobile-nav-toggle');
+    const sidebar = document.getElementById('sidebar');
+    toggleBtn.addEventListener('click', () => {
+      const expanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+      toggleBtn.setAttribute('aria-expanded', !expanded);
+      sidebar.classList.toggle('open');
+    });
+  </script>
+</body>
+</html>
