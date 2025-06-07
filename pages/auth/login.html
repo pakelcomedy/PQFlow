@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login — PQFlow Pro</title>
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="../manifest.json" />
+  <!-- Favicon -->
+  <link rel="icon" href="../favicon.ico" />
+  <!-- Global Styles -->
+  <link rel="stylesheet" href="../styles/style.css" />
+</head>
+<body>
+  <!-- Skip Link for Accessibility -->
+  <a href="#login-form" class="skip-link">Skip to login form</a>
+
+  <!-- HEADER -->
+  <header class="site-header" role="banner">
+    <div class="container">
+      <a href="../index.html" class="logo" aria-label="PakelFileConvert Home">PQFlow Pro</a>
+      <nav class="main-nav" role="navigation">
+        <ul>
+          <li><a href="../index.html">Home</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- LOGIN SECTION -->
+  <main id="main-content" class="login-page">
+    <section class="login-section container" aria-labelledby="login-title">
+      <h1 id="login-title">Admin Login</h1>
+      <p class="login-intro">Please sign in with your admin account to manage queues.</p>
+
+      <!-- Error & Status Message -->
+      <div id="login-message" class="status-message" role="alert" aria-live="assertive"></div>
+
+      <!-- Login Form -->
+      <form id="login-form" action="#" method="post" novalidate>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            placeholder="you@example.com" 
+            required 
+            aria-required="true" 
+            autocomplete="username" />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input 
+            type="password" 
+            id="password" 
+            name="password" 
+            placeholder="••••••••" 
+            required 
+            aria-required="true" 
+            autocomplete="current-password" />
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Login</button>
+        </div>
+
+        <div class="form-footer">
+          <a href="forgot-password.html" class="link">Forgot password?</a>
+          <span> | </span>
+          <a href="register.html" class="link">Sign up</a>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-grid">
+      <div class="footer-col">
+        <a href="index.html" class="logo">PQFlow Pro</a>
+        <p>&copy; 2025 PQFlow Pro. All rights reserved.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#how-it-works">How It Works</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="../pages/admin.html">Admin</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Language</h4>
+        <div class="footer-actions">
+          <button id="lang-en" class="lang-btn active" aria-pressed="true">EN</button>
+          <button id="lang-id" class="lang-btn" aria-pressed="false">ID</button>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JS Files -->
+  <script src="../scripts/utils.js"></script>
+  <script src="../scripts/auth.js"></script>
+  <script src="../scripts/i18n.js"></script>
+  <script src="../scripts/pwa.js"></script>
+</body>
+</html>

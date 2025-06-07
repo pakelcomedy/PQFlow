@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register — PQFlow Pro</title>
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="../manifest.json" />
+  <!-- Favicon -->
+  <link rel="icon" href="../favicon.ico" />
+  <!-- Global Styles -->
+  <link rel="stylesheet" href="../styles/style.css" />
+</head>
+<body>
+  <!-- Skip Link for Accessibility -->
+  <a href="#register-form" class="skip-link">Skip to registration form</a>
+
+  <!-- HEADER -->
+  <header class="site-header" role="banner">
+    <div class="container">
+      <a href="../index.html" class="logo" aria-label="PQFlow Pro Home">PQFlow Pro</a>
+      <nav class="main-nav" role="navigation">
+        <ul>
+          <li><a href="../index.html">Home</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- REGISTER SECTION -->
+  <main id="main-content" class="login-page">
+    <section class="login-section container" aria-labelledby="register-title">
+      <h1 id="register-title">Admin Registration</h1>
+      <p class="login-intro">Please create an admin account to manage queues.</p>
+
+      <!-- Error & Status Message -->
+      <div id="register-message" class="status-message" role="alert" aria-live="assertive"></div>
+
+      <!-- Registration Form -->
+      <form id="register-form" action="#" method="post" novalidate>
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Your full name"
+            required
+            aria-required="true"
+            autocomplete="name" />
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="you@example.com"
+            required
+            aria-required="true"
+            autocomplete="username" />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="••••••••"
+            required
+            aria-required="true"
+            autocomplete="new-password" />
+        </div>
+
+        <div class="form-group">
+          <label for="confirm-password">Confirm Password</label>
+          <input
+            type="password"
+            id="confirm-password"
+            name="confirm-password"
+            placeholder="••••••••"
+            required
+            aria-required="true"
+            autocomplete="new-password" />
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Register</button>
+        </div>
+
+        <div class="form-footer">
+          <a href="login.html" class="link">Already have an account? Login</a>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-grid">
+      <div class="footer-col">
+        <a href="../index.html" class="logo">PQFlow Pro</a>
+        <p>&copy; 2025 PQFlow Pro. All rights reserved.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="../index.html#how-it-works">How It Works</a></li>
+          <li><a href="../index.html#features">Features</a></li>
+          <li><a href="admin.html">Admin</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Language</h4>
+        <div class="footer-actions">
+          <button id="lang-en" class="lang-btn active" aria-pressed="true">EN</button>
+          <button id="lang-id" class="lang-btn" aria-pressed="false">ID</button>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JS Files -->
+  <script src="../scripts/utils.js"></script>
+  <script src="../scripts/auth.js"></script>
+  <script src="../scripts/i18n.js"></script>
+  <script src="../scripts/pwa.js"></script>
+</body>
+</html>

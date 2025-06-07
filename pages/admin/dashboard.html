@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — PQFlow Pro</title>
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="../manifest.json" />
+  <!-- Favicon -->
+  <link rel="icon" href="../favicon.ico" />
+  <!-- Global Styles -->
+  <link rel="stylesheet" href="../styles/style.css" />
+</head>
+<body>
+  <!-- Skip Link -->
+  <a href="#main-dashboard" class="skip-link">Skip to main dashboard</a>
+
+  <!-- HEADER -->
+  <header class="site-header" role="banner">
+    <div class="container">
+      <a href="../index.html" class="logo" aria-label="PQFlow Pro Home">PQFlow Pro</a>
+      <button class="mobile-nav-toggle" aria-controls="sidebar" aria-expanded="false">
+        <span class="sr-only">Toggle sidebar</span>
+        ☰
+      </button>
+      <nav class="main-nav" role="navigation">
+        <ul>
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="admin.html">Admin Panel</a></li>
+          <li><a href="dashboard.html" class="active">Dashboard</a></li>
+          <li><button id="logout-btn" class="btn btn-outline">Logout</button></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- LAYOUT: SIDEBAR + MAIN -->
+  <div class="dashboard-layout">
+    <!-- SIDEBAR -->
+    <aside id="sidebar" class="sidebar" role="navigation">
+      <ul class="sidebar-menu">
+        <li><a href="admin.html"><span class="icon">🗂️</span> Manage Queues</a></li>
+        <li><a href="dashboard.html" class="active"><span class="icon">📊</span> Overview</a></li>
+        <li><a href="history.html"><span class="icon">📁</span> History</a></li>
+        <li><a href="export.html"><span class="icon">⬇️</span> Export Data</a></li>
+        <li><a href="settings.html"><span class="icon">⚙️</span> Settings</a></li>
+      </ul>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main id="main-dashboard" class="dashboard-content">
+      <div class="container">
+        <h1>Dashboard Overview</h1>
+
+        <!-- Top Metrics Cards -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <h3>Total Branches</h3>
+            <p id="total-branches">—</p>
+          </div>
+          <div class="metric-card">
+            <h3>Active Services</h3>
+            <p id="active-services">—</p>
+          </div>
+          <div class="metric-card">
+            <h3>Today's Tickets</h3>
+            <p id="todays-tickets">—</p>
+          </div>
+          <div class="metric-card">
+            <h3>Pending Queues</h3>
+            <p id="pending-queues">—</p>
+          </div>
+        </div>
+
+        <!-- Charts Section -->
+        <section class="charts-section">
+          <div class="chart-card">
+            <h2>Daily Queue Volume</h2>
+            <canvas id="dailyQueueChart"></canvas>
+          </div>
+          <div class="chart-card">
+            <h2>Branch Comparison</h2>
+            <canvas id="branchComparisonChart"></canvas>
+          </div>
+        </section>
+
+        <!-- Recent Activity Table -->
+        <section class="table-section">
+          <h2>Recent Queue Activity</h2>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Branch</th>
+                <th>Service</th>
+                <th>Queue #</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="recent-activity-body">
+              <!-- JS injects rows here -->
+            </tbody>
+          </table>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-grid">
+      <div class="footer-col">
+        <a href="../index.html" class="logo">PQFlow Pro</a>
+        <p>&copy; 2025 PQFlow Pro. All rights reserved.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="admin.html">Manage Queues</a></li>
+          <li><a href="history.html">History</a></li>
+          <li><a href="settings.html">Settings</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Language</h4>
+        <div class="footer-actions">
+          <button id="lang-en" class="lang-btn active" aria-pressed="true">EN</button>
+          <button id="lang-id" class="lang-btn" aria-pressed="false">ID</button>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JS Files -->
+  <script src="../scripts/utils.js"></script>
+  <script src="../scripts/firestore.js"></script>
+  <script src="../scripts/admin.js"></script>
+  <script src="../scripts/dashboard.js"></script>
+  <script src="../scripts/pwa.js"></script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PQFlow Pro — Virtual Queue System</title>
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json" />
+  <!-- Favicon -->
+  <link rel="icon" href="favicon.ico" />
+  <!-- Global Styles -->
+  <link rel="stylesheet" href="styles/style.css" />
+</head>
+<body>
+  <!-- Accessibility Skip Link -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- HEADER -->
+  <header class="site-header" role="banner">
+    <div class="container">
+      <a href="index.html" class="logo" aria-label="PQFlow Pro Home">PQFlow Pro</a>
+      <button class="mobile-nav-toggle" aria-controls="main-nav" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        ☰
+      </button>
+      <nav id="main-nav" class="main-nav" role="navigation">
+        <ul>
+          <li><a href="#how-it-works">How It Works</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#contact" class="visually-hidden">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <h1 id="hero-title">Welcome to PQFlow Pro</h1>
+        <p>Your seamless virtual queue experience. No apps or forms needed — just scan or click to join!</p>
+        <div class="hero-actions">
+          <button id="scan-qr-btn" class="btn btn-primary">Scan QR Code</button>
+          <button id="join-link-btn" class="btn btn-outline">Join via Link</button>
+        </div>
+        <div id="status-message" class="status-message" role="status" aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+
+  <main id="main-content">
+    <!-- HOW IT WORKS -->
+    <section id="how-it-works" class="how-it-works container" aria-labelledby="how-title">
+      <h2 id="how-title">How It Works</h2>
+      <ol class="steps-list">
+        <li>
+          <h3>1. Scan or Click</h3>
+          <p>Use the QR code or provided link for your desired service.</p>
+        </li>
+        <li>
+          <h3>2. Auto-Join</h3>
+          <p>Encrypted data stored securely in your browser, no forms required.</p>
+        </li>
+        <li>
+          <h3>3. Track Progress</h3>
+          <p>Real-time updates show your current position and estimated wait time.</p>
+        </li>
+      </ol>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="features" class="features container" aria-labelledby="features-title">
+      <h2 id="features-title">Key Features</h2>
+      <div class="feature-cards">
+        <article class="card" aria-labelledby="feature1-title">
+          <h3 id="feature1-title">Real-Time Updates</h3>
+          <p>Instant queue status powered by Firebase Firestore snapshots.</p>
+        </article>
+        <article class="card" aria-labelledby="feature2-title">
+          <h3 id="feature2-title">Offline Support</h3>
+          <p>Continue to view your queue status even without an internet connection.</p>
+        </article>
+        <article class="card" aria-labelledby="feature3-title">
+          <h3 id="feature3-title">Multi-Language</h3>
+          <p>Switch seamlessly between English and Bahasa Indonesia.</p>
+        </article>
+        <article class="card" aria-labelledby="feature4-title">
+          <h3 id="feature4-title">Secure & Private</h3>
+          <p>All queue data AES-encrypted client-side before storage.</p>
+        </article>
+        <article class="card" aria-labelledby="feature5-title">
+          <h3 id="feature5-title">Smart Distribution</h3>
+          <p>Auto-assign customers to the least-busy counter.</p>
+        </article>
+        <article class="card" aria-labelledby="feature6-title">
+          <h3 id="feature6-title">Priority Mode</h3>
+          <p>Flag urgent cases to be served before regular queues.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-grid">
+      <div class="footer-col">
+        <a href="index.html" class="logo">PQFlow Pro</a>
+        <p>&copy; 2025 PQFlow Pro. All rights reserved.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#how-it-works">How It Works</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="./pages/admin/dashboard.html">Admin</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Language</h4>
+        <div class="footer-actions">
+          <button id="lang-en" class="lang-btn active" aria-pressed="true">EN</button>
+          <button id="lang-id" class="lang-btn" aria-pressed="false">ID</button>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JS FILES -->
+  <script src="scripts/utils.js"></script>
+  <script src="scripts/i18n.js"></script>
+  <script src="scripts/user.js"></script>
+  <script src="scripts/pwa.js"></script>
+</body>
+</html>
