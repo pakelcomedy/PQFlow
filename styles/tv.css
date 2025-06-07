@@ -14,81 +14,52 @@ html, body {
   height: 100%;
   overflow: hidden;
   font-family: 'Poppins', sans-serif;
-  background-color: #000000;  /* TRUE BLACK */
-  color: #ffffff;
-}
-body.tv-dark {
-  background-color: #000000;
-  color: #ffffff;
+  background-color: #000;
+  color: #fff;
 }
 
-/* Container */
+/* Root container: vertical flex */
 #tv-container {
   display: flex;
   flex-direction: column;
   height: 100%;
 }
 
-/* Header */
-#tv-header {
-  text-align: center;
-  padding: 1rem;
-  background-color: #000000;  /* full black, no opacity */
-}
-#tv-header h1 {
-  font-size: 3rem;
-  font-weight: 600;
-}
-#tv-header h2 {
-  font-size: 2rem;
-  font-weight: 400;
-  color: #bbbbbb;
-}
-
-/* Main Number Display */
+/* Main Number Display (fills available space) */
 #tv-main {
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #000;
 }
 #number-display {
   font-size: 14rem;
   font-weight: 700;
   line-height: 1;
-  text-shadow: none;         /* matikan text-shadow untuk hemat energi */
-  /* optional subtle glow via box-shadow on container */
-}
-#tv-main #number-display {
-  /* minimal glow using border if needed */
-  /* border: 0.5rem solid rgba(255,255,255,0.1); */
+  text-shadow: none;
+  animation: pulse 2s ease-in-out infinite;
 }
 
 /* Footer Clock */
 #tv-footer {
-  text-align: right;
-  padding: 0.5rem 1rem;
-  background-color: #000000;  /* full black */
+  text-align: center;
+  padding: 0.5rem 0;
+  background-color: #000;
 }
 #tv-clock {
   font-size: 1.5rem;
   font-family: 'Roboto Mono', monospace;
-  color: #ffffff;
 }
 
-/* Pulse animation (lower contrast) */
+/* Pulse animation (very subtle) */
 @keyframes pulse {
   0%, 100% { transform: scale(1); opacity: 1; }
   50%      { transform: scale(1.02); opacity: 0.9; }
 }
-#number-display {
-  animation: pulse 2s ease-in-out infinite;
-}
 
 /* Responsive Scaling */
 @media (max-width: 768px) {
-  #tv-header h1 { font-size: 2.5rem; }
-  #tv-header h2 { font-size: 1.5rem; }
   #number-display { font-size: 8rem; }
-  #tv-clock { font-size: 1.25rem; }
+  #tv-clock      { font-size: 1.25rem; }
 }

@@ -1,49 +1,63 @@
 // scripts/tv.js
 
-// Update clock every second
-function startClock() {
-  const clockEl = document.getElementById('tv-clock');
-  setInterval(() => {
+// —————— Firestore init ——————
+if (typeof initFirestore === 'function') initFirestore();
+const db = firebase.firestore();
+
+// —————— Clock ——————
+function startClock(){
+  const el = document.getElementById('tv-clock');
+  setInterval(()=>{
     const now = new Date();
-    const hh = String(now.getHours()).padStart(2, '0');
-    const mm = String(now.getMinutes()).padStart(2, '0');
-    const ss = String(now.getSeconds()).padStart(2, '0');
-    clockEl.textContent = `${hh}:${mm}:${ss}`;
+    el.textContent = now.toLocaleTimeString('en-GB');
   }, 1000);
 }
 
-// Firestore real-time listener for current number, branch & service
-async function initTVMode() {
+// —————— On load ——————
+window.addEventListener('DOMContentLoaded', async () => {
   startClock();
 
-  // Assume current branch/service IDs are stored in query params
-  const params = new URLSearchParams(window.location.search);
-  const branchId = params.get('branch') || 'default-branch';
-  const serviceId = params.get('service') || 'default-service';
+  // parse org ID from URL
+  const params   = new URLSearchParams(location.search);
+  const orgId    = params.get('org');
+  if (!orgId) {
+    document.getElementById('number-display').textContent = 'Invalid link';
+    return;
+  }
 
-  // Display branch/service labels
-  document.getElementById('tv-branch').textContent = `Branch: ${branchId}`;
-  document.getElementById('tv-service').textContent = `Service: ${serviceId}`;
+  // DOM refs
+  const disp   = document.getElementById('number-display');
+  const hdr    = document.getElementById('tv-branch');
+  hdr.textContent = `Organization: ${orgId}`;
 
-  // Reference Firestore collection: queues/{branch}/{service}/current
-  const docRef = firestore
-    .collection('branches').doc(branchId)
-    .collection('services').doc(serviceId);
+  // ONE‑TIME transaction: atomically increment counter & create ticket,
+  // then display that number and NEVER increment again on reload.
+  // We store the assigned ticket ID in sessionStorage so refresh won't re-run.
+  let ticketNum = sessionStorage.getItem(`pq-${orgId}-ticket`);
+  if (!ticketNum) {
+    ticketNum = await db.runTransaction(async tx => {
+      const counterRef = db.collection('queues').doc(orgId);
+      const snap       = await tx.get(counterRef);
+      let nextNum = 1;
+      if (snap.exists && snap.data().current) {
+        nextNum = snap.data().current + 1;
+        tx.update(counterRef, { current: nextNum });
+      } else {
+        tx.set(counterRef, { current: 1 });
+      }
+      // persist ticket record
+      const tRef = db.collection('queues').doc(orgId)
+                     .collection('tickets').doc();
+      tx.set(tRef, {
+        number:    nextNum,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        status:    'waiting'
+      });
+      return nextNum;
+    });
+    sessionStorage.setItem(`pq-${orgId}-ticket`, ticketNum);
+  }
 
-  // Listen for changes
-  docRef.onSnapshot(doc => {
-    if (!doc.exists) return;
-    const data = doc.data();
-    if (data.currentNumber !== undefined) {
-      document.getElementById('number-display').textContent = data.currentNumber;
-    }
-  }, err => {
-    console.error('TV mode listener error:', err);
-  });
-}
-
-// Initialize after DOM loaded
-document.addEventListener('DOMContentLoaded', () => {
-  initFirestore();    // from firestore.js
-  initTVMode();       // this file
+  // display
+  disp.textContent = ticketNum;
 });

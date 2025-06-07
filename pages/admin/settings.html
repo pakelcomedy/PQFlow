@@ -82,6 +82,24 @@
         </div>
       </section>
 
+        <div>
+        <!-- …after the “Manage Counters” section… -->
+    <section class="settings-section">
+      <h2>Organization Link</h2>
+      <div class="form-group">
+        <button id="gen-link-btn" class="btn btn-outline">Generate Link & QR‑Code</button>
+      </div>
+      <div class="form-group" style="display: none;" id="link-group">
+        <label for="org-link">Your Join URL</label>
+        <a id="org-link" href="#" target="_blank" class="form-control link-control"></a>
+      </div>
+      <div class="form-group" style="display: none;" id="qr-group">
+        <div id="qr-canvas"></div>
+      </div>
+    </section>
+
+  </div>
+
         <!-- Counter Settings -->
         <section class="settings-section">
           <h2>Manage Counters</h2>
@@ -158,6 +176,9 @@
     </div>
   </footer>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
@@ -171,7 +192,6 @@
 
   <!-- Script Admin / PWA / Dll -->
   <script src="../../scripts/auth.js"></script>
-  <script src="../../scripts/admin/admin.js"></script>
   <script src="../../scripts/pwa.js"></script>
   <script src="../../scripts/admin/settings.js"></script>
 </body>

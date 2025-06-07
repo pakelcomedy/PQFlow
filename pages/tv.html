@@ -5,33 +5,27 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TV Mode — PQFlow Pro</title>
-  
-  <!-- PWA Manifest & Favicon -->
   <link rel="manifest" href="../manifest.json" />
   <link rel="icon" href="../favicon.ico" />
-  
-  <!-- TV-specific Styles -->
   <link rel="stylesheet" href="../styles/tv.css" />
 </head>
 <body class="tv-dark">
   <div id="tv-container">
-    <header id="tv-header">
-      <h1 id="tv-branch">Branch: —</h1>
-      <h2 id="tv-service">Service: —</h2>
-    </header>
-    
     <main id="tv-main">
       <div id="number-display">—</div>
     </main>
-    
     <footer id="tv-footer">
       <div id="tv-clock">--:--:--</div>
     </footer>
   </div>
 
-  <!-- Scripts -->
-  <script src="../scripts/utils.js"></script>
-  <script src="../scripts/firestore.js"></script>
+<!-- Only on pages that need Auth -->
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+<script src="../scripts/firestore.js"></script>
+<!-- ... then auth.js, settings.js, admin.js, etc. -->
+
   <script src="../scripts/tv.js"></script>
 </body>
 </html>

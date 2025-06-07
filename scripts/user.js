@@ -1,77 +1,75 @@
 // scripts/user.js
-;(async () => {
-  // 1) Init Firestore/Auth
+(async function() {
+  // 1) Init Firestore
   if (typeof initFirestore === 'function') initFirestore();
+  const db = firebase.firestore();
 
-  // 2) Grab query param + DOM nodes
+  // 2) Grab elements & URL param
   const params   = new URLSearchParams(location.search);
   const orgId    = params.get('org');
-  const statusEl = document.getElementById('status-message');
-  const joinBtn  = document.getElementById('join-link-btn');
+  const joinBtn  = document.getElementById('join-btn');
+  const statusEl = document.getElementById('status');
 
-  // 3) Validate orgId
   if (!orgId) {
     statusEl.textContent = 'Invalid link.';
     return;
   }
 
-  // 4) Fetch org’s settings to get a friendly name
-  try {
-    const cfgRef = db
-      .collection('users').doc(orgId)
-      .collection('settings').doc('config');
-    const cfgSnap = await cfgRef.get();
-    if (!cfgSnap.exists) {
-      statusEl.textContent = 'Organization not found.';
-      return;
-    }
-    const { systemName = 'this organization' } = cfgSnap.data();
-    statusEl.textContent    = `Welcome to ${systemName}!`;
-    joinBtn.style.display   = 'inline-block';
-  } catch (err) {
-    console.error('Failed to load organization info:', err);
-    statusEl.textContent = 'Could not load organization.';
+  // 3) Verify org exists (settings/config must exist)
+  const cfg = await db
+    .collection('users').doc(orgId)
+    .collection('settings').doc('config')
+    .get();
+  if (!cfg.exists) {
+    statusEl.textContent = 'Organization not found.';
     return;
   }
 
-  // 5) Handle “Join Queue” click
-  joinBtn.addEventListener('click', async () => {
-    joinBtn.disabled     = true;
-    statusEl.textContent = 'Getting your number…';
+  statusEl.textContent = `Welcome to ${cfg.data().systemName || 'our queue service'}`;
+  joinBtn.style.display = 'inline-block';
 
-    const counterRef  = db
-      .collection('organizations').doc(orgId)
-      .collection('counters').doc('current');
-    const ticketsCol  = db
-      .collection('organizations').doc(orgId)
-      .collection('tickets');
+  // 4) Click handler: create ticket then redirect
+  joinBtn.addEventListener('click', async () => {
+    joinBtn.disabled = true;
+    statusEl.textContent = 'Generating your ticket…';
 
     try {
-      // 6) Atomically bump counter + write ticket
-      const yourNumber = await db.runTransaction(async tx => {
-        const snap = await tx.get(counterRef);
-        let next = 1;
-        if (snap.exists) {
-          next = (snap.data().current || 0) + 1;
-        }
-        tx.set(counterRef, { current: next }, { merge: true });
+      const baseRef   = db.collection('organizations').doc(orgId);
+      const counterRef = baseRef.collection('counters').doc('current');
+      const ticketsCol = baseRef.collection('tickets');
 
-        const reqRef = ticketsCol.doc();
-        tx.set(reqRef, {
-          number:    next,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          status:    'waiting'
+      // runTransaction to atomically bump counter and create ticket
+      const { ticketId, number } = await db.runTransaction(async tx => {
+        // a) Read & bump "current" counter
+        const ctrSnap = await tx.get(counterRef);
+        let nextNum = 1;
+        if (ctrSnap.exists) {
+          nextNum = (ctrSnap.data().current || 0) + 1;
+          tx.update(counterRef, { current: nextNum });
+        } else {
+          tx.set(counterRef, { current: 1 });
+        }
+
+        // b) Create the ticket doc
+        const newDocRef = ticketsCol.doc();
+        tx.set(newDocRef, {
+          number:     nextNum,
+          createdAt:  firebase.firestore.FieldValue.serverTimestamp(),
+          servedAt:   null,
+          skippedAt:  null,
+          counter:    null
         });
 
-        return next;
+        return { ticketId: newDocRef.id, number: nextNum };
       });
 
-      // 7) Success
-      statusEl.innerHTML = `Your queue number is <strong>${yourNumber}</strong>.`;
+      // c) Redirect to TV page with org & ticket params
+      location.href = `pages/tv.html?org=${orgId}&ticket=${ticketId}`;
+
     } catch (err) {
-      console.error('Join queue failed:', err);
-      statusEl.textContent = 'Failed to join queue. Please try again.';
-      joinBtn.disabled     = false;
+      console.error('Join error:', err);
+      statusEl.textContent = 'Failed to get ticket. Try again.';
+      joinBtn.disabled = false;
     }
   });
 })();
