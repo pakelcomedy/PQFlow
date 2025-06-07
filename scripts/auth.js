@@ -55,114 +55,99 @@ if (regForm) {
 const loginForm = document.getElementById('login-form');
 if (loginForm) {
   const msgEl = document.getElementById('login-message');
-  loginForm.addEventListener('submit', async e => {
-    e.preventDefault();
-    const email = document.getElementById('email').value.trim();
-    const pw    = document.getElementById('password').value;
+  const submitBtn = loginForm.querySelector('button[type="submit"]');
 
+  loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById('email').value.trim();
+    const pw = document.getElementById('password').value;
+
+    // Validasi sederhana
     if (!email || !pw) {
-      show(msgEl, 'Email & password required.', 'error');
+      show(msgEl, 'Email dan password wajib diisi.', 'error');
       return;
     }
 
+    // Nonaktifkan tombol agar tidak diklik berkali-kali
+    submitBtn.disabled = true;
+    show(msgEl, 'Sedang masuk…', 'info');
+
     try {
-      show(msgEl, 'Signing in…', 'info');
       await firebase.auth().signInWithEmailAndPassword(email, pw);
-      show(msgEl, 'Logged in! Redirecting…', 'success');
-      setTimeout(() => location.href = 'index.html', 800);
+      show(msgEl, 'Berhasil masuk! Mengalihkan…', 'success');
+      setTimeout(() => location.href = 'index.html', 1000);
     } catch (err) {
       console.error(err);
-      show(msgEl, err.message, 'error');
+
+      // Tangani error umum Firebase Auth
+      switch (err.code) {
+        case 'auth/invalid-email':
+          show(msgEl, 'Format email tidak valid.', 'error');
+          break;
+        case 'auth/user-not-found':
+          show(msgEl, 'Pengguna tidak ditemukan.', 'error');
+          break;
+        case 'auth/wrong-password':
+          show(msgEl, 'Password salah.', 'error');
+          break;
+        case 'auth/too-many-requests':
+          show(msgEl, 'Terlalu banyak percobaan login. Coba lagi nanti.', 'error');
+          break;
+        case 'auth/network-request-failed':
+          show(msgEl, 'Gagal terhubung ke server. Periksa koneksi Anda.', 'error');
+          break;
+        default:
+          show(msgEl, err.message || 'Terjadi kesalahan.', 'error');
+      }
+    } finally {
+      // Aktifkan kembali tombol setelah 3 detik (kecuali terlalu banyak request)
+      if (err?.code === 'auth/too-many-requests') {
+        setTimeout(() => (submitBtn.disabled = false), 3 * 60 * 1000); // 3 menit
+      } else {
+        setTimeout(() => (submitBtn.disabled = false), 2000);
+      }
     }
   });
 }
 
 // ————————————————————————————————
-// FORGOT & RESET (OTP flow)
+// FORGOT & RESET (Firebase built-in)
 // ————————————————————————————————
 const fpForm = document.getElementById('fp-form');
 if (fpForm) {
   const msgEl   = document.getElementById('fp-message');
   const emailEl = document.getElementById('fp-email');
-  const otpEl   = document.getElementById('fp-otp');
-  const passEl  = document.getElementById('fp-password');
-  const cpassEl = document.getElementById('fp-confirm');
-  const btnOtp  = document.getElementById('send-otp-btn');
-  let otpEmail  = null, otpTimer = null;
 
-  const genOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
-
-  // Send OTP
-  btnOtp.addEventListener('click', async () => {
-    const email = emailEl.value.trim();
-    if (!email) {
-      show(msgEl, 'Enter email first.', 'error');
-      return;
-    }
-    btnOtp.disabled = true;
-    show(msgEl, 'Sending OTP…', 'info');
-
-    try {
-      const code = genOTP();
-      await db.collection('password_reset').doc(email).set({
-        otp: code,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      otpEmail = email;
-      console.log('DEBUG OTP:', code);
-      show(msgEl, 'OTP sent! Check console/email.', 'success');
-
-      // countdown
-      let t = 60;
-      btnOtp.textContent = `Resend in ${t}s`;
-      otpTimer = setInterval(() => {
-        t--;
-        if (t <= 0) {
-          clearInterval(otpTimer);
-          btnOtp.textContent = 'Send OTP';
-          btnOtp.disabled = false;
-        } else {
-          btnOtp.textContent = `Resend in ${t}s`;
-        }
-      }, 1000);
-
-    } catch (err) {
-      console.error(err);
-      show(msgEl, 'Failed to send OTP.', 'error');
-      btnOtp.disabled = false;
-      btnOtp.textContent = 'Send OTP';
-    }
-  });
-
-  // Verify + Reset
   fpForm.addEventListener('submit', async e => {
     e.preventDefault();
-    const otp  = otpEl.value.trim();
-    const pw   = passEl.value;
-    const cpw  = cpassEl.value;
+    const email = emailEl.value.trim();
 
-    if (!otpEmail) {
-      show(msgEl, 'Request an OTP first.', 'error');
-      return;
-    }
-    if (!otp || !pw || pw !== cpw) {
-      show(msgEl, 'Check OTP & passwords.', 'error');
+    if (!email) {
+      show(msgEl, 'Email wajib diisi.', 'error');
       return;
     }
 
     try {
-      show(msgEl, 'Verifying…', 'info');
-      const doc = await db.collection('password_reset').doc(otpEmail).get();
-      if (!doc.exists || doc.data().otp !== otp) {
-        throw new Error('Invalid OTP');
-      }
-      await db.collection('password_reset').doc(otpEmail).delete();
-      await firebase.auth().sendPasswordResetEmail(otpEmail);
-      show(msgEl, 'Reset link sent! Check email.', 'success');
+      show(msgEl, 'Mengirim link reset…', 'info');
+      await firebase.auth().sendPasswordResetEmail(email);
+      show(msgEl, 'Link reset terkirim! Cek email Anda.', 'success');
       setTimeout(() => location.href = 'login.html', 2000);
     } catch (err) {
       console.error(err);
-      show(msgEl, err.message, 'error');
+      switch (err.code) {
+        case 'auth/invalid-email':
+          show(msgEl, 'Format email tidak valid.', 'error');
+          break;
+        case 'auth/user-not-found':
+          show(msgEl, 'Pengguna tidak ditemukan.', 'error');
+          break;
+        case 'auth/network-request-failed':
+          show(msgEl, 'Gagal terhubung. Periksa koneksi Anda.', 'error');
+          break;
+        default:
+          show(msgEl, err.message || 'Terjadi kesalahan.', 'error');
+      }
     }
   });
 }
