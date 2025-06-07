@@ -7,36 +7,42 @@ PQFlow Pro is a secure, scalable, and fully client-side virtual queue system des
 ```
 PQFlow/
 ├── pages/
-│   ├── login.html            # Halaman login admin
-│   ├── register.html            # Halaman login admin
-│   ├── forgot-password.html            # Halaman login admin
-│   ├── admin.html            # Panel kontrol admin per cabang/layanan
-│   ├── dashboard.html        # Dashboard multi-cabang untuk superadmin
-│   └── tv.html               # Mode fullscreen untuk display nomor panggilan
-├── index.html                # Halaman utama user (auto-join via QR/link)
-├── manifest.json             # PWA manifest
-├── service-worker.js         # Service Worker (Workbox) untuk offline
-├── firebase.json             # Konfigurasi Firebase (rules, hosting, etc.)
-├── README.md                 # Dokumentasi proyek dan setup
-├── ROADMAP.md                # Rencana pengembangan & fitur roadmap
-├── package.json              # (Opsional) untuk Workbox build & dev scripts
-├── scripts/
-│   ├── firestore.js          # Inisialisasi Firebase & Firestore SDK
-│   ├── auth.js               # Logic Firebase Auth (login/logout/register/forgot password)
-│   ├── user.js               # Logic auto-join & status user
-│   ├── admin.js              # Logic kontrol antrian admin
-│   ├── tv.js                 # Logic display untuk TV mode
-│   ├── pwa.js                # Registrasi Service Worker & caching
-│   └── utils.js              # Helper: enkripsi AES, CSV export, QR generator, dsb.
-├── lang/
-│   ├── en.json               # String bahasa Inggris
-│   └── id.json               # String bahasa Indonesia
-├── styles/
-│   └── style.css             # CSS global (Tailwind/vanilla)
-
+│   ├── auth/                     # Halaman OAuth (login/register/forgot)
+│   │   ├── login.html
+│   │   ├── register.html
+│   │   └── forgot-password.html
+│   ├── admin/                    # Admin panel & dashboard
+│   │   ├── index.html            # alias admin.html (manage queues)
+│   │   ├── dashboard.html        # superadmin dashboard
+│   │   ├── history.html          # riwayat antrean
+│   │   ├── export.html           # halaman export CSV/JSON
+│   │   └── settings.html         # pengaturan cabang/layanan
+│   └── tv.html                   # fullscreen TV mode
+├── index.html                    # Halaman utama user (auto-join via QR/link)
+├── manifest.json                 # PWA manifest
+├── service-worker.js             # Service Worker (Workbox) untuk offline
+├── firebase.json                 # Konfigurasi Firebase (rules, hosting, etc.)
+├── README.md                     # Dokumentasi proyek dan setup
+├── ROADMAP.md                    # Rencana pengembangan & fitur roadmap
+├── package.json                  # (Opsional) untuk Workbox build & dev scripts
+├── scripts/                      # Aset JS global
+│   ├── firestore.js
+│   ├── user.js
+│   ├── tv.js
+│   ├── pwa.js
+│   └── utils.js
+├── scripts/admin/                # Aset JS khusus Admin
+│   ├── auth.js                   # login/logout/register/forgot logic
+│   ├── admin.js                  # kontrol antrean per cabang
+│   └── dashboard.js              # chart & statistik superadmin
+├── styles/                       # Aset CSS global
+│   └── style.css
+├── styles/admin/                 # Aset CSS khusus Admin
+│   ├── admin.css
+│   └── dashboard.css
 └── .github/
     └── workflows/
-        └── deploy.yml        # GitHub Actions untuk deploy ke Pages
+        └── deploy.yml            # GitHub Actions untuk deploy ke Pages
 ```
 ---
 
