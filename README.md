@@ -29,10 +29,11 @@ PQFlow/
 │   ├── firestore.js
 │   ├── user.js
 │   ├── tv.js
+│   ├── auth.js                   # login/logout/register/forgot logic
 │   ├── pwa.js
 │   └── utils.js
 ├── scripts/admin/                # Aset JS khusus Admin
-│   ├── auth.js                   # login/logout/register/forgot logic
+│   ├── settings.js                   # login/logout/register/forgot logic
 │   ├── admin.js                  # kontrol antrean per cabang
 │   └── dashboard.js              # chart & statistik superadmin
 ├── styles/                       # Aset CSS global
