@@ -6,22 +6,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard — PQFlow Pro</title>
 
-  <!-- PWA Manifest & Favicon -->
   <link rel="manifest" href="../../manifest.json" />
   <link rel="icon" href="../../favicon.ico" />
 
-  <!-- Global Styles -->
   <link rel="stylesheet" href="../../styles/style.css" />
-  <!-- Admin-specific Styles -->
   <link rel="stylesheet" href="../../styles/admin/dashboard.css" />
 </head>
 <body>
-  <!-- Skip Link -->
   <a href="#main-dashboard" class="skip-link">Skip to main dashboard</a>
 
-  <!-- LAYOUT: SIDEBAR + MAIN -->
   <div class="dashboard-layout">
-    <!-- SIDEBAR -->
     <aside id="sidebar" class="sidebar" role="navigation">
       <ul class="sidebar-menu">
         <li><a href="index.html"><span aria-hidden="true">🗂️</span> Manage Queues</a></li>
@@ -32,20 +26,14 @@
       </ul>
     </aside>
 
-    <!-- MAIN CONTENT -->
     <main id="main-dashboard" class="dashboard-content" role="main">
       <div class="container">
         <h1>Dashboard Overview</h1>
 
-        <!-- Top Metrics Cards -->
         <div class="metrics-grid">
           <div class="metric-card">
-            <h3>Total Branches</h3>
-            <p id="total-branches">—</p>
-          </div>
-          <div class="metric-card">
-            <h3>Active Services</h3>
-            <p id="active-services">—</p>
+            <h3>Total Counters</h3>
+            <p id="total-counters">—</p>
           </div>
           <div class="metric-card">
             <h3>Today's Tickets</h3>
@@ -57,37 +45,34 @@
           </div>
         </div>
 
-        <!-- Charts Section -->
         <section class="charts-section">
           <div class="chart-card">
             <h2>Daily Queue Volume</h2>
             <canvas id="dailyQueueChart" aria-label="Daily queue volume chart"></canvas>
           </div>
           <div class="chart-card">
-            <h2>Branch Comparison</h2>
-            <canvas id="branchComparisonChart" aria-label="Branch comparison chart"></canvas>
+            <h2>Counter Comparison</h2>
+            <canvas id="counterComparisonChart" aria-label="Counter comparison chart"></canvas>
           </div>
         </section>
 
-        <!-- Recent Activity Table -->
         <section class="table-section">
           <h2>Recent Queue Activity</h2>
           <div class="table-wrapper">
             <table class="data-table" aria-describedby="recent-activity-desc">
               <caption id="recent-activity-desc" class="visually-hidden">
-                Recent queue activity showing timestamp, branch, service, queue number, and status.
+                Recent queue activity showing timestamp, counter, queue number, and status.
               </caption>
               <thead>
                 <tr>
                   <th scope="col">Time</th>
-                  <th scope="col">Branch</th>
-                  <th scope="col">Service</th>
+                  <th scope="col">Counter</th>
                   <th scope="col">Queue #</th>
                   <th scope="col">Status</th>
                 </tr>
               </thead>
               <tbody id="recent-activity-body">
-                <!-- JS injects rows here -->
+                <!-- Injected via JS -->
               </tbody>
             </table>
           </div>
@@ -96,7 +81,6 @@
     </main>
   </div>
 
-  <!-- FOOTER -->
   <footer class="site-footer" role="contentinfo">
     <div class="container footer-grid">
       <div class="footer-col">
@@ -126,16 +110,11 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 
-  <!-- Inisialisasi Firestore/Auth -->
   <script src="../../scripts/firestore.js"></script>
-
-  <!-- ROUTE GUARD -->
   <script src="../../scripts/auth-guard.js"></script>
-
-  <!-- Script Admin / PWA / Dll -->
   <script src="../../scripts/auth.js"></script>
-  <script src="../../scripts/admin/admin.js"></script>
   <script src="../../scripts/pwa.js"></script>
-
+  <script src="../../scripts/admin/dashboard.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html>
