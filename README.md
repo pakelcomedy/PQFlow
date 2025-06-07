@@ -4,6 +4,38 @@
 
 PQFlow Pro is a secure, scalable, and fully client-side virtual queue system designed for commercial use in hospitals, workshops, pharmacies, public services, and more. Users join with a simple QR code scan or link click—no apps or forms needed. Admins manage multiple branches, services, and counters via Firebase, all hosted on GitHub Pages.
 
+```
+PQFlow/
+├── pages/
+│   ├── login.html            # Halaman login admin
+│   ├── admin.html            # Panel kontrol admin per cabang/layanan
+│   ├── dashboard.html        # Dashboard multi-cabang untuk superadmin
+│   └── tv.html               # Mode fullscreen untuk display nomor panggilan
+├── index.html                # Halaman utama user (auto-join via QR/link)
+├── manifest.json             # PWA manifest
+├── service-worker.js         # Service Worker (Workbox) untuk offline
+├── firebase.json             # Konfigurasi Firebase (rules, hosting, etc.)
+├── README.md                 # Dokumentasi proyek dan setup
+├── ROADMAP.md                # Rencana pengembangan & fitur roadmap
+├── package.json              # (Opsional) untuk Workbox build & dev scripts
+├── scripts/
+│   ├── firestore.js          # Inisialisasi Firebase & Firestore SDK
+│   ├── auth.js               # Logic Firebase Auth (login/logout)
+│   ├── user.js               # Logic auto-join & status user
+│   ├── admin.js              # Logic kontrol antrian admin
+│   ├── tv.js                 # Logic display untuk TV mode
+│   ├── pwa.js                # Registrasi Service Worker & caching
+│   └── utils.js              # Helper: enkripsi AES, CSV export, QR generator, dsb.
+├── lang/
+│   ├── en.json               # String bahasa Inggris
+│   └── id.json               # String bahasa Indonesia
+├── styles/
+│   └── style.css             # CSS global (Tailwind/vanilla)
+
+└── .github/
+    └── workflows/
+        └── deploy.yml        # GitHub Actions untuk deploy ke Pages
+```
 ---
 
 ## 👥 Roles & Permissions
@@ -21,7 +53,7 @@ PQFlow Pro is a secure, scalable, and fully client-side virtual queue system des
 1. **Auto-Join via QR/Link**  
    - URL format:  
      ```
-     https://your-domain.com/?autoJoin=true&branch=<branchId>&service=<serviceId>
+     https://pqflow.web.id/?autoJoin=true&branch=<branchId>&service=<serviceId>
      ```
    - Generates encrypted queue entry, stores in Firestore & localStorage.
 
