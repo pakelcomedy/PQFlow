@@ -151,7 +151,7 @@
 
     // Generate Link & QR
     genLinkBtn.onclick = () => {
-      const base    = 'http://127.0.0.1:3000/pages/tv.html';
+      const base    = 'https://pakelcomedy.github.io/PQFlow/pages/tv.html';
       const joinUrl = `${base}?org=${uid}`;
 
       linkGroup.style.display = 'block';
