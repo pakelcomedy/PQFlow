@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PQFlow Pro — Virtual Queue System</title>
+  <title data-i18n="title">PQFlow Pro — Virtual Queue System</title>
 
   <!-- PWA Manifest -->
   <link rel="manifest" href="manifest.json" />
@@ -15,19 +15,19 @@
 </head>
 <body>
   <!-- Accessibility Skip Link -->
-  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <a href="#main-content" class="skip-link" data-i18n="skipLink">Skip to main content</a>
 
   <!-- HEADER -->
   <header class="site-header" role="banner">
     <div class="container">
-      <a href="index.html" class="logo" aria-label="PQFlow Pro Home">PQFlow Pro</a>
+      <a href="index.html" class="logo" aria-label="PQFlow Pro Home" data-i18n="logo">PQFlow Pro</a>
       <button class="mobile-nav-toggle" aria-controls="main-nav" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>☰
+        <span class="sr-only" data-i18n="toggleNav">Toggle navigation</span>☰
       </button>
       <nav id="main-nav" class="main-nav" role="navigation">
         <ul>
-          <li><a href="#how-it-works">How It Works</a></li>
-          <li><a href="#features">Features</a></li>
+          <li><a href="#how-it-works" data-i18n="nav.howItWorks">How It Works</a></li>
+          <li><a href="#features" data-i18n="nav.features">Features</a></li>
         </ul>
       </nav>
     </div>
@@ -37,8 +37,10 @@
   <section class="hero" aria-labelledby="hero-title">
     <div class="container hero-grid">
       <div class="hero-copy">
-        <h1 id="hero-title">Welcome to PQFlow Pro</h1>
-        <p>A modern, hassle-free virtual queue experience — join instantly and track your position in real time.</p>
+        <h1 id="hero-title" data-i18n="hero.title">Welcome to PQFlow Pro</h1>
+        <p data-i18n="hero.subtitle">
+          A modern, hassle-free virtual queue experience — join instantly and track your position in real time.
+        </p>
       </div>
     </div>
   </section>
@@ -46,44 +48,54 @@
   <main id="main-content">
     <!-- TICKET DISPLAY SECTION -->
     <section id="ticket-section" class="ticket-section container" style="display: none;" aria-labelledby="ticket-title">
-      <h2 id="ticket-title">Your Queue Number</h2>
+      <h2 id="ticket-title" data-i18n="ticket.title">Your Queue Number</h2>
       <div id="ticket-display" class="ticket-display">—</div>
     </section>
 
     <!-- HOW IT WORKS -->
     <section id="how-it-works" class="how-it-works container" aria-labelledby="how-title">
-      <h2 id="how-title">How It Works</h2>
+      <h2 id="how-title" data-i18n="how.title">How It Works</h2>
       <ol class="steps-list">
         <li>
-          <h3>1. Scan or Tap</h3>
-          <p>Scan the QR code or open a provided link to instantly join the queue for a specific service or counter.</p>
+          <h3 data-i18n="how.step1.title">1. Scan or Tap</h3>
+          <p data-i18n="how.step1.desc">
+            Scan the QR code or open a provided link to instantly join the queue for a specific service or counter.
+          </p>
         </li>
         <li>
-          <h3>2. Get Your Number</h3>
-          <p>Your ticket number is generated automatically — no form or registration required.</p>
+          <h3 data-i18n="how.step2.title">2. Get Your Number</h3>
+          <p data-i18n="how.step2.desc">
+            Your ticket number is generated automatically — no form or registration required.
+          </p>
         </li>
         <li>
-          <h3>3. Wait for Your Turn</h3>
-          <p>Your number will be displayed when it’s called. Track queue progress directly on your device.</p>
+          <h3 data-i18n="how.step3.title">3. Wait for Your Turn</h3>
+          <p data-i18n="how.step3.desc">
+            Your number will be displayed when it’s called. Track queue progress directly on your device.
+          </p>
         </li>
       </ol>
     </section>
 
     <!-- FEATURES -->
     <section id="features" class="features container" aria-labelledby="features-title">
-      <h2 id="features-title">Key Features</h2>
+      <h2 id="features-title" data-i18n="features.title">Key Features</h2>
       <div class="feature-cards">
         <div class="feature-card">
-          <h3>Real-Time Updates</h3>
-          <p>Live ticket calls and position tracking powered by Firebase.</p>
+          <h3 data-i18n="features.realTime.title">Real-Time Updates</h3>
+          <p data-i18n="features.realTime.desc">Live ticket calls and position tracking powered by Firebase.</p>
         </div>
         <div class="feature-card">
-          <h3>Multiple Counters</h3>
-          <p>Tickets can be served by any available counter in your organization.</p>
+          <h3 data-i18n="features.multiCounter.title">Multiple Counters</h3>
+          <p data-i18n="features.multiCounter.desc">
+            Tickets can be served by any available counter in your organization.
+          </p>
         </div>
         <div class="feature-card">
-          <h3>Simple Admin</h3>
-          <p>Admins can call, skip, or reset tickets from a web dashboard.</p>
+          <h3 data-i18n="features.simpleAdmin.title">Simple Admin</h3>
+          <p data-i18n="features.simpleAdmin.desc">
+            Admins can call, skip, or reset tickets from a web dashboard.
+          </p>
         </div>
       </div>
     </section>
@@ -93,22 +105,24 @@
   <footer class="site-footer" role="contentinfo">
     <div class="container footer-grid">
       <div class="footer-col">
-        <a href="index.html" class="logo">PQFlow Pro</a>
-        <p>&copy; 2025 PQFlow Pro. All rights reserved.</p>
+        <a href="index.html" class="logo" data-i18n="logo">PQFlow Pro</a>
+        <p data-i18n="footer.copyright">
+          © 2025 PQFlow Pro. All rights reserved.
+        </p>
       </div>
       <div class="footer-col">
-        <h4>Quick Links</h4>
+        <h4 data-i18n="footer.quickLinks">Quick Links</h4>
         <ul>
-          <li><a href="#how-it-works">How It Works</a></li>
-          <li><a href="#features">Features</a></li>
-          <li><a href="pages/admin/index.html">Admin</a></li>
+          <li><a href="#how-it-works" data-i18n="nav.howItWorks">How It Works</a></li>
+          <li><a href="#features" data-i18n="nav.features">Features</a></li>
+          <li><a href="pages/admin/index.html" data-i18n="footer.admin">Admin</a></li>
         </ul>
       </div>
       <div class="footer-col">
-        <h4>Language</h4>
+        <h4 data-i18n="footer.language">Language</h4>
         <div class="footer-actions">
-          <button id="lang-en" class="lang-btn active" aria-pressed="true">EN</button>
-          <button id="lang-id" class="lang-btn" aria-pressed="false">ID</button>
+          <button id="lang-en" class="lang-btn active" aria-pressed="true" data-i18n="lang.en">EN</button>
+          <button id="lang-id" class="lang-btn" aria-pressed="false" data-i18n="lang.id">ID</button>
         </div>
       </div>
     </div>

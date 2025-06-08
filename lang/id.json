@@ -1,0 +1,57 @@
+{
+  "title": "PQFlow Pro — Sistem Antrian Virtual",
+  "skipLink": "Lewati ke konten utama",
+  "logo": "PQFlow Pro",
+  "toggleNav": "Buka/Tutup navigasi",
+  "nav": {
+    "howItWorks": "Cara Kerja",
+    "features": "Fitur"
+  },
+  "hero": {
+    "title": "Selamat Datang di PQFlow Pro",
+    "subtitle": "Pengalaman antrean virtual modern tanpa ribet — bergabung instan dan pantau posisi secara real time."
+  },
+  "ticket": {
+    "title": "Nomor Antrian Anda"
+  },
+  "how": {
+    "title": "Cara Kerja",
+    "step1": {
+      "title": "1. Pindai atau Ketuk",
+      "desc": "Pindai kode QR atau buka tautan yang diberikan untuk langsung bergabung ke antrian layanan atau loket tertentu."
+    },
+    "step2": {
+      "title": "2. Dapatkan Nomor",
+      "desc": "Nomor antrean Anda dibuat otomatis — tanpa perlu form atau registrasi."
+    },
+    "step3": {
+      "title": "3. Tunggu Giliran",
+      "desc": "Nomor Anda akan ditampilkan saat dipanggil. Pantau perkembangan antrean langsung di perangkat Anda."
+    }
+  },
+  "features": {
+    "title": "Fitur Utama",
+    "realTime": {
+      "title": "Pembaruan Waktu-Nyata",
+      "desc": "Panggilan tiket langsung dan pelacakan posisi didukung oleh Firebase."
+    },
+    "multiCounter": {
+      "title": "Beberapa Loket",
+      "desc": "Tiket dapat dilayani oleh loket mana pun yang tersedia di organisasi Anda."
+    },
+    "simpleAdmin": {
+      "title": "Admin Sederhana",
+      "desc": "Admin dapat memanggil, melewati, atau mereset tiket dari dasbor web."
+    }
+  },
+  "footer": {
+    "copyright": "© 2025 PQFlow Pro. Semua hak cipta dilindungi.",
+    "quickLinks": "Tautan Cepat",
+    "admin": "Admin",
+    "language": "Bahasa"
+  },
+  "lang": {
+    "en": "EN",
+    "id": "ID"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "title": "PQFlow Pro — Virtual Queue System",
+  "skipLink": "Skip to main content",
+  "logo": "PQFlow Pro",
+  "toggleNav": "Toggle navigation",
+  "nav": {
+    "howItWorks": "How It Works",
+    "features": "Features"
+  },
+  "hero": {
+    "title": "Welcome to PQFlow Pro",
+    "subtitle": "A modern, hassle-free virtual queue experience — join instantly and track your position in real time."
+  },
+  "ticket": {
+    "title": "Your Queue Number"
+  },
+  "how": {
+    "title": "How It Works",
+    "step1": {
+      "title": "1. Scan or Tap",
+      "desc": "Scan the QR code or open a provided link to instantly join the queue for a specific service or counter."
+    },
+    "step2": {
+      "title": "2. Get Your Number",
+      "desc": "Your ticket number is generated automatically — no form or registration required."
+    },
+    "step3": {
+      "title": "3. Wait for Your Turn",
+      "desc": "Your number will be displayed when it’s called. Track queue progress directly on your device."
+    }
+  },
+  "features": {
+    "title": "Key Features",
+    "realTime": {
+      "title": "Real-Time Updates",
+      "desc": "Live ticket calls and position tracking powered by Firebase."
+    },
+    "multiCounter": {
+      "title": "Multiple Counters",
+      "desc": "Tickets can be served by any available counter in your organization."
+    },
+    "simpleAdmin": {
+      "title": "Simple Admin",
+      "desc": "Admins can call, skip, or reset tickets from a web dashboard."
+    }
+  },
+  "footer": {
+    "copyright": "© 2025 PQFlow Pro. All rights reserved.",
+    "linksTitle": "Quick Links",
+    "admin": "Admin",
+    "language": "Language"
+  },
+  "lang": {
+    "en": "EN",
+    "id": "ID"
+  }
+}
