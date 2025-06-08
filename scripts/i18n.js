@@ -1,7 +1,7 @@
 (() => {
   const DEFAULT_LANG = 'en';
   const STORAGE_KEY  = 'lang';
-  const DICT_FOLDER  = '/lang/';      // folder JSON-mu
+  const DICT_FOLDER  = 'lang/';      // folder JSON-mu
   const DATA_ATTR    = 'data-i18n';
   const PLACEHOLDER  = 'data-i18n-placeholder';
 
