@@ -27,41 +27,49 @@
   // HELPERS
   // ————————————————————————————————
   function clearWaiting() {
-    if (waitingBody) waitingBody.innerHTML = '';
+    waitingBody && (waitingBody.innerHTML = '');
   }
 
   function renderWaitingRow(doc) {
-    if (!waitingBody) return;
     const d = doc.data();
     const tr = document.createElement('tr');
     tr.dataset.id = doc.id;
     tr.innerHTML = `
       <td>${d.number}</td>
       <td>${d.createdAt?.toDate().toLocaleTimeString() || '-'}</td>
-      <td>${d.priority || 'Normal'}</td>
-      <td>${d.source || 'Link'}</td>
+      <td>${d.counter || '—'}</td>
+      <td>${d.skippedAt ? '⏭️' : ''}</td>
     `;
     waitingBody.appendChild(tr);
   }
 
-  function subscribeWaiting(counterId) {
-    if (unsubscribeWaiting) unsubscribeWaiting();
-    if (!orgId) return;
-
+  // subscribe to ALL unserved tickets, sorted client‑side
+  function subscribeWaiting() {
+    unsubscribeWaiting && unsubscribeWaiting();
     ticketsCol = db
       .collection('organizations').doc(orgId)
       .collection('tickets');
 
     unsubscribeWaiting = ticketsCol
       .where('servedAt', '==', null)
-      .where('counter', '==', counterId)
-      .orderBy('createdAt', 'asc')
-      .onSnapshot(snap => {
+      .onSnapshot(snapshot => {
         clearWaiting();
-        if (snap.empty) {
-          waitingBody.innerHTML = `<tr><td colspan="4" class="empty">No active tickets</td></tr>`;
+        const docs = snapshot.docs
+          .map(d => ({ id: d.id, data: d.data() }))
+          .sort((a, b) => {
+            const ta = a.data.createdAt?.toMillis() || 0;
+            const tb = b.data.createdAt?.toMillis() || 0;
+            return ta - tb;
+          });
+        if (!docs.length) {
+          waitingBody.innerHTML = `
+            <tr><td colspan="4" class="empty">No active tickets</td></tr>
+          `;
         } else {
-          snap.docs.forEach(renderWaitingRow);
+          docs.forEach(item => {
+            // create a fake doc-like object
+            renderWaitingRow({ id: item.id, data: () => item.data });
+          });
         }
       }, err => {
         console.error('Waiting listener error:', err);
@@ -69,61 +77,74 @@
   }
 
   // ————————————————————————————————
-  // CONTROL BINDING
+  // CONTROLS
   // ————————————————————————————————
   function initControls() {
-    // Disable semua tombol dulu
-    [btnCall, btnSkip, btnReset, btnBack].forEach(b => { if (b) b.disabled = true; });
+    [btnCall, btnSkip, btnReset, btnBack].forEach(b => b.disabled = false);
 
-    // Dropdown counter
-    counterSelect.addEventListener('change', () => {
-      const cnt = counterSelect.value;
-      const ready = !!cnt;
-      [btnCall, btnSkip, btnReset, btnBack].forEach(b => { if (b) b.disabled = !ready; });
-      if (ready) subscribeWaiting(cnt);
-      else clearWaiting();
-    });
-
-    // Call Next
+    // CALL NEXT: pick earliest, mark servedAt + counter
     btnCall.addEventListener('click', async () => {
-      const cnt = counterSelect.value;
-      if (!cnt) return alert('Please select a counter first.');
-      const snap = await ticketsCol
-        .where('servedAt','==',null)
-        .where('counter','==',cnt)
-        .orderBy('createdAt','asc')
-        .limit(1)
-        .get();
-      if (snap.empty) return alert('No tickets to call.');
-      lastCalledTicket = snap.docs[0];
-      currentNumberEl.textContent = lastCalledTicket.data().number;
+      const selectedCounter = counterSelect.value;
+      if (!selectedCounter) {
+        return alert('Please select a counter first.');
+      }
+
+      // fetch all unserved
+      const snap = await ticketsCol.get();
+      const nextDoc = snap.docs
+        .map(d => ({ ref:d.ref, data:d.data() }))
+        .filter(x => x.data.servedAt == null)
+        .sort((a, b) => {
+          const ta = a.data.createdAt?.toMillis() || 0;
+          const tb = b.data.createdAt?.toMillis() || 0;
+          return ta - tb;
+        })[0];
+
+      if (!nextDoc) {
+        return alert('No tickets to call.');
+      }
+
+      // mark it served + assign counter
+      await nextDoc.ref.update({
+        servedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        counter:  selectedCounter
+      });
+
+      lastCalledTicket = nextDoc;
+      currentNumberEl.textContent = nextDoc.data.number;
     });
 
-    // Skip
+    // SKIP: timestamp skippedAt
     btnSkip.addEventListener('click', async () => {
       if (!lastCalledTicket) return;
-      await lastCalledTicket.ref.update({ skippedAt: firebase.firestore.FieldValue.serverTimestamp() });
+      await lastCalledTicket.ref.update({
+        skippedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
       currentNumberEl.textContent = '—';
     });
 
-    // Back
+    // BACK: remove skippedAt
     btnBack.addEventListener('click', async () => {
       if (!lastCalledTicket) return;
-      await lastCalledTicket.ref.update({ skippedAt: firebase.firestore.FieldValue.delete() });
-      currentNumberEl.textContent = lastCalledTicket.data().number;
+      await lastCalledTicket.ref.update({
+        skippedAt: firebase.firestore.FieldValue.delete()
+      });
+      currentNumberEl.textContent = lastCalledTicket.data.number;
     });
 
-    // Reset
+    // RESET: mark all unserved as resetAt
     btnReset.addEventListener('click', async () => {
       if (!confirm('Reset queue?')) return;
-      const cnt = counterSelect.value;
-      const snap = await ticketsCol
-        .where('servedAt','==',null)
-        .where('counter','==',cnt).get();
+      const snapAll = await ticketsCol.get();
       const batch = db.batch();
-      snap.docs.forEach(d => batch.update(d.ref, {
-        resetAt: firebase.firestore.FieldValue.serverTimestamp()
-      }));
+      snapAll.docs.forEach(d => {
+        const data = d.data();
+        if (data.servedAt == null) {
+          batch.update(d.ref, {
+            resetAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        }
+      });
       await batch.commit();
       currentNumberEl.textContent = '—';
       lastCalledTicket = null;
@@ -132,7 +153,7 @@
   }
 
   // ————————————————————————————————
-  // AUTH STATE → INIT DATA & CONTROLS
+  // AUTH STATE → LOAD DROPDOWN, LISTEN & BIND
   // ————————————————————————————————
   auth.onAuthStateChanged(async user => {
     if (!user) {
@@ -140,38 +161,36 @@
     }
     orgId = user.uid;
 
-    // Ambil daftar counter dari per‐user settings
+    // load all counters from settings
     const countersSnap = await db
       .collection('users').doc(orgId)
       .collection('settings').doc('config')
       .collection('counters')
       .get();
 
-    // Populate dropdown
-    if (counterSelect) {
-      counterSelect.innerHTML = '<option value="">-- Select Counter --</option>';
-      countersSnap.forEach(doc => {
-        const { label } = doc.data();
-        counterSelect.insertAdjacentHTML(
-          'beforeend',
-          `<option value="${doc.id}">${label}</option>`
-        );
-      });
-    }
+    // fill dropdown
+    counterSelect.innerHTML = `<option value="">-- Select Counter --</option>`;
+    countersSnap.forEach(doc => {
+      const { label } = doc.data();
+      counterSelect.insertAdjacentHTML('beforeend',
+        `<option value="${doc.id}">${label}</option>`
+      );
+    });
 
-    // Pasang controls & listener
+    // start listening & wire controls
+    subscribeWaiting();
     initControls();
   });
 
   // ————————————————————————————————
-  // MOBILE NAV TOGGLE (opsional)
+  // MOBILE NAV TOGGLE (optional)
   // ————————————————————————————————
-  const navToggle = document.querySelector('.mobile-nav-toggle');
-  navToggle?.addEventListener('click', () => {
-    const nav = document.getElementById('main-nav');
-    const exp = navToggle.getAttribute('aria-expanded') === 'true';
-    navToggle.setAttribute('aria-expanded', String(!exp));
-    nav.classList.toggle('open');
-  });
-
+  document.querySelector('.mobile-nav-toggle')
+    ?.addEventListener('click', () => {
+      const nav = document.getElementById('main-nav');
+      const btn = document.querySelector('.mobile-nav-toggle');
+      const exp = btn.getAttribute('aria-expanded')==='true';
+      btn.setAttribute('aria-expanded', String(!exp));
+      nav.classList.toggle('open');
+    });
 })();
