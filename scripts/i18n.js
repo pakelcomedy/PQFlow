@@ -1,49 +1,73 @@
-const defaultLang = 'en';
-const supportedLangs = ['en', 'id'];
-const btnEn = document.getElementById('lang-en');
-const btnId = document.getElementById('lang-id');
+// js/i18n.js — Handles loading & applying translations
+(() => {
+  const DEFAULT_LANG = 'en';
+  const STORAGE_KEY  = 'lang';
+  const DICT_FOLDER  = '/lang/';      // ← ensure trailing slash
+  const DATA_ATTR    = 'data-i18n';
+  const PLACEHOLDER  = 'data-i18n-placeholder';
 
-function getLang() {
-  return localStorage.getItem('lang') || defaultLang;
-}
+  // 1) Keep a map of all loaded dictionaries
+  const cache = new Map();
+  let currentLang = null;
 
-function setLang(lang) {
-  if (!supportedLangs.includes(lang)) return;
-  localStorage.setItem('lang', lang);
-  loadAndApply(lang);
-  updateButtons(lang);
-}
+  const dictUrl = lang => `${DICT_FOLDER}${lang}.json`;
 
-async function loadAndApply(lang) {
-  try {
-    // tanpa slash depan, jadi relative ke folder HTML (atau ke base href jika dipakai)
-    const res = await fetch(`lang/PQFlow/${lang}.json`);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-      const key = el.getAttribute('data-i18n');
-      const text = key.split('.').reduce((o,i) => o?.[i], data);
-      if (text) el.innerText = text;
-    });
-  } catch (e) {
-    console.error('Error loading lang file:', e);
+  async function fetchDict(lang) {
+    if (cache.has(lang)) {
+      return cache.get(lang);
+    }
+
+    try {
+      const res = await fetch(dictUrl(lang), { cache: 'no-cache' });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const dict = await res.json();
+      cache.set(lang, dict);
+      console.info(`i18n: loaded "${lang}"`);
+      return dict;
+    } catch (err) {
+      console.warn(`i18n: failed to load "${lang}" (${err.message})`);
+      if (lang !== DEFAULT_LANG) {
+        // fallback once
+        return await fetchDict(DEFAULT_LANG);
+      }
+      return {}; // ultimate fallback
+    }
   }
-}
 
-function updateButtons(activeLang) {
-  supportedLangs.forEach(lang => {
-    const btn = document.getElementById(`lang-${lang}`);
-    const isActive = (lang === activeLang);
-    btn.classList.toggle('active', isActive);
-    btn.setAttribute('aria-pressed', isActive);
+  function applyText(dict) {
+    document.querySelectorAll(`[${DATA_ATTR}]`).forEach(el => {
+      const key = el.getAttribute(DATA_ATTR);
+      if (dict[key] != null) el.textContent = dict[key];
+    });
+  }
+
+  function applyPlaceholder(dict) {
+    document.querySelectorAll(`[${PLACEHOLDER}]`).forEach(el => {
+      const key = el.getAttribute(PLACEHOLDER);
+      if (dict[key] != null) el.setAttribute('placeholder', dict[key]);
+    });
+  }
+
+  async function setLanguage(lang) {
+    const dict = await fetchDict(lang);
+    applyText(dict);
+    applyPlaceholder(dict);
+    document.documentElement.lang = lang;
+    localStorage.setItem(STORAGE_KEY, lang);
+    currentLang = lang;
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const selector = document.getElementById('langSelector');
+    const saved    = localStorage.getItem(STORAGE_KEY) || DEFAULT_LANG;
+
+    if (selector) {
+      selector.value = saved;
+      selector.addEventListener('change', () => {
+        setLanguage(selector.value);
+      });
+    }
+
+    setLanguage(saved);
   });
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  const lang = getLang();
-  loadAndApply(lang);
-  updateButtons(lang);
-
-  btnEn.addEventListener('click', () => setLang('en'));
-  btnId.addEventListener('click', () => setLang('id'));
-});
+})();
