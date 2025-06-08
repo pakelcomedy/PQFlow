@@ -38,31 +38,16 @@
     <div class="container hero-grid">
       <div class="hero-copy">
         <h1 id="hero-title">Welcome to PQFlow Pro</h1>
-        <p>Your seamless virtual queue experience. No apps or forms needed — just scan or click to join!</p>
-  <!-- inside <section class="hero"> … -->
-  <div class="hero-actions">
-    <button id="scan-qr-btn" class="btn btn-primary">Scan QR Code</button>
-    <button id="join-link-btn" class="btn btn-outline">Join via Link</button>
-  </div>
-  <div id="status-message" class="status-message" role="status" aria-live="polite"></div>
-  <!-- Ticket Display (hidden until join) -->
-  <section id="ticket-section" class="ticket-section container" style="display:none;" aria-labelledby="ticket-title">
-    <h2 id="ticket-title">Your Queue Number</h2>
-    <div id="ticket-display" class="ticket-display">…</div>
-  </section>
-
-        <div id="status-message" class="status-message" role="status" aria-live="polite"></div>
+        <p>A modern, hassle-free virtual queue experience — join instantly and track your position in real time.</p>
       </div>
     </div>
   </section>
 
-  
-
   <main id="main-content">
-    <!-- Ticket Display (hidden until join) -->
-    <section id="ticket-section" class="ticket-section container" style="display:none;" aria-labelledby="ticket-title">
+    <!-- TICKET DISPLAY SECTION -->
+    <section id="ticket-section" class="ticket-section container" style="display: none;" aria-labelledby="ticket-title">
       <h2 id="ticket-title">Your Queue Number</h2>
-      <div id="ticket-display" class="ticket-display">…</div>
+      <div id="ticket-display" class="ticket-display">—</div>
     </section>
 
     <!-- HOW IT WORKS -->
@@ -70,16 +55,16 @@
       <h2 id="how-title">How It Works</h2>
       <ol class="steps-list">
         <li>
-          <h3>1. Scan or Click</h3>
-          <p>Use the QR code or provided link for your desired service.</p>
+          <h3>1. Scan or Tap</h3>
+          <p>Scan the QR code or open a provided link to instantly join the queue for a specific service or counter.</p>
         </li>
         <li>
-          <h3>2. Auto-Join</h3>
-          <p>No form to fill—just tap “Confirm” once you see your number.</p>
+          <h3>2. Get Your Number</h3>
+          <p>Your ticket number is generated automatically — no form or registration required.</p>
         </li>
         <li>
-          <h3>3. Track Progress</h3>
-          <p>Real-time updates show your current position and estimated wait time.</p>
+          <h3>3. Wait for Your Turn</h3>
+          <p>Your number will be displayed when it’s called. Track queue progress directly on your device.</p>
         </li>
       </ol>
     </section>
@@ -88,7 +73,18 @@
     <section id="features" class="features container" aria-labelledby="features-title">
       <h2 id="features-title">Key Features</h2>
       <div class="feature-cards">
-        <!-- cards as before… -->
+        <div class="feature-card">
+          <h3>Real-Time Updates</h3>
+          <p>Live ticket calls and position tracking powered by Firebase.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Multiple Counters</h3>
+          <p>Tickets can be served by any available counter in your organization.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Simple Admin</h3>
+          <p>Admins can call, skip, or reset tickets from a web dashboard.</p>
+        </div>
       </div>
     </section>
   </main>
@@ -118,18 +114,18 @@
     </div>
   </footer>
 
-  <!-- 1) Firebase SDKs (require before firestore.js) -->
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 
-  <!-- 2) Firestore Init -->
+  <!-- Firestore Init -->
   <script src="scripts/firestore.js"></script>
 
-  <!-- 3) User Logic: scan QR, join link, get ticket -->
+  <!-- User Script: handles scan/join -->
   <script src="scripts/user.js"></script>
 
-  <!-- 4) Utils, i18n & PWA -->
+  <!-- Misc utilities -->
   <script src="scripts/utils.js"></script>
   <script src="scripts/i18n.js"></script>
   <script src="scripts/pwa.js"></script>
