@@ -15,13 +15,13 @@
     <header id="tv-header" class="flex center">
       <!-- Organization Name -->
       <div class="header-item org-container">
-        <h1 id="tv-org-name" class="org-name">Organization: —</h1>
+        <h1 id="tv-org-name" class="org-name">Organization:</h1>
       </div>
 
       <!-- Now Serving (kecil, di header) -->
       <div class="header-item serving-header">
         <span class="serving-label">Now Serving:</span>
-        <span id="served-number" class="serving-number">—</span>
+        <span id="served-number" class="serving-number"></span>
       </div>
 
       <!-- Clock -->
@@ -41,32 +41,9 @@
           <span class="label">Your Ticket</span>
         </div>
         <div class="card-body">
-          <span id="ticket-display" class="number">—</span>
+          <span id="ticket-display" class="number"></span>
         </div>
       </section>
-
-      <!-- Progress Card -->
-      <section id="progress-container" class="card progress-card">
-        <div class="card-header">
-          <svg class="icon progress-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 17.93V20a8 8 0 1 1 0-16v1.07A7 7 0 1 0 13 19.93z"/>
-          </svg>
-          <span class="label">Progress</span>
-        </div>
-        <div class="card-body">
-          <div class="circle-wrapper">
-            <svg class="progress-circle" viewBox="0 0 100 100">
-              <circle class="circle-bg" cx="50" cy="50" r="45" />
-              <circle class="circle-fill" cx="50" cy="50" r="45" />
-            </svg>
-            <div class="progress-text">
-              <span id="progress-percent">0%</span>
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
-  </div>
 
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
