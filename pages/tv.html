@@ -11,6 +11,9 @@
 </head>
 <body class="tv-dark">
   <div id="tv-container">
+    <header id="tv-header">
+      <h1 id="tv-branch"></h1>
+    </header>
     <main id="tv-main">
       <div id="number-display">—</div>
     </main>
@@ -19,13 +22,14 @@
     </footer>
   </div>
 
-<!-- Only on pages that need Auth -->
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
-<script src="../scripts/firestore.js"></script>
-<!-- ... then auth.js, settings.js, admin.js, etc. -->
+  <!-- 1) Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 
+  <!-- 2) Your Firestore Init (defines window.db) -->
+  <script src="../scripts/firestore.js"></script>
+
+  <!-- 3) TV Mode logic -->
   <script src="../scripts/tv.js"></script>
 </body>
 </html>

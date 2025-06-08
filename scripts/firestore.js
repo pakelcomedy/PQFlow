@@ -1,4 +1,5 @@
-// scripts/firestore.js
+// File: scripts/firestore.js
+
 // ————————————————————————————————
 // FIREBASE INITIALIZATION
 // ————————————————————————————————
@@ -12,7 +13,6 @@ const firebaseConfig = {
   measurementId: "G-16TT21TJ73"
 };
 
-// Init only if not already initialized
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
   console.log("✅ Firebase App initialized.");
@@ -20,21 +20,14 @@ if (!firebase.apps.length) {
   console.log("ℹ️ Firebase already initialized.");
 }
 
-// Optional: Analytics
-if (firebase.analytics) {
-  firebase.analytics();
-}
+// (Optional) Analytics
+if (firebase.analytics) firebase.analytics();
 
-// Init Firestore & Auth
-const db   = firebase.firestore();
-const auth = firebase.auth();
+// Initialize Firestore
+const db = firebase.firestore();
+window.db = db;
 
-// Make globals available
-window.firebase = firebase;
-window.db       = db;
-window.auth     = auth;
-
-// Optional helper: initFirestore (used in auth.js/settings.js)
+// Helper for pages that may re-call initFirestore()
 function initFirestore() {
   if (!window.db) {
     window.db = firebase.firestore();
@@ -42,4 +35,4 @@ function initFirestore() {
 }
 window.initFirestore = initFirestore;
 
-console.log("✅ Firestore & Auth initialized.");
+console.log("✅ Firestore initialized.");

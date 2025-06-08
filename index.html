@@ -39,14 +39,24 @@
       <div class="hero-copy">
         <h1 id="hero-title">Welcome to PQFlow Pro</h1>
         <p>Your seamless virtual queue experience. No apps or forms needed — just scan or click to join!</p>
-        <div class="hero-actions">
-          <button id="scan-qr-btn" class="btn btn-primary">Scan QR Code</button>
-          <button id="join-link-btn" class="btn btn-outline">Join via Link</button>
-        </div>
+  <!-- inside <section class="hero"> … -->
+  <div class="hero-actions">
+    <button id="scan-qr-btn" class="btn btn-primary">Scan QR Code</button>
+    <button id="join-link-btn" class="btn btn-outline">Join via Link</button>
+  </div>
+  <div id="status-message" class="status-message" role="status" aria-live="polite"></div>
+  <!-- Ticket Display (hidden until join) -->
+  <section id="ticket-section" class="ticket-section container" style="display:none;" aria-labelledby="ticket-title">
+    <h2 id="ticket-title">Your Queue Number</h2>
+    <div id="ticket-display" class="ticket-display">…</div>
+  </section>
+
         <div id="status-message" class="status-message" role="status" aria-live="polite"></div>
       </div>
     </div>
   </section>
+
+  
 
   <main id="main-content">
     <!-- Ticket Display (hidden until join) -->

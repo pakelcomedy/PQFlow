@@ -1,63 +1,102 @@
-// scripts/tv.js
+// File: scripts/tv.js
+;(function() {
+  // ————————— Init Firestore —————————
+  if (typeof initFirestore === 'function') initFirestore();
+  const db = firebase.firestore();
 
-// —————— Firestore init ——————
-if (typeof initFirestore === 'function') initFirestore();
-const db = firebase.firestore();
-
-// —————— Clock ——————
-function startClock(){
-  const el = document.getElementById('tv-clock');
-  setInterval(()=>{
-    const now = new Date();
-    el.textContent = now.toLocaleTimeString('en-GB');
-  }, 1000);
-}
-
-// —————— On load ——————
-window.addEventListener('DOMContentLoaded', async () => {
-  startClock();
-
-  // parse org ID from URL
-  const params   = new URLSearchParams(location.search);
-  const orgId    = params.get('org');
-  if (!orgId) {
-    document.getElementById('number-display').textContent = 'Invalid link';
-    return;
+  // ————————— Clock Display —————————
+  function startClock() {
+    const clockEl = document.getElementById('tv-clock');
+    setInterval(() => {
+      const now = new Date();
+      const hh = String(now.getHours()).padStart(2, '0');
+      const mm = String(now.getMinutes()).padStart(2, '0');
+      const ss = String(now.getSeconds()).padStart(2, '0');
+      clockEl.textContent = `${hh}:${mm}:${ss}`;
+    }, 1000);
   }
 
-  // DOM refs
-  const disp   = document.getElementById('number-display');
-  const hdr    = document.getElementById('tv-branch');
-  hdr.textContent = `Organization: ${orgId}`;
+  // ————————— Main Init —————————
+  async function initTV() {
+    startClock();
 
-  // ONE‑TIME transaction: atomically increment counter & create ticket,
-  // then display that number and NEVER increment again on reload.
-  // We store the assigned ticket ID in sessionStorage so refresh won't re-run.
-  let ticketNum = sessionStorage.getItem(`pq-${orgId}-ticket`);
-  if (!ticketNum) {
-    ticketNum = await db.runTransaction(async tx => {
-      const counterRef = db.collection('queues').doc(orgId);
-      const snap       = await tx.get(counterRef);
-      let nextNum = 1;
-      if (snap.exists && snap.data().current) {
-        nextNum = snap.data().current + 1;
-        tx.update(counterRef, { current: nextNum });
-      } else {
-        tx.set(counterRef, { current: 1 });
+    // 1) Parse URL params
+    const params   = new URLSearchParams(window.location.search);
+    const orgId    = params.get('org');
+    let ticketId   = params.get('ticket');
+
+    const dispEl = document.getElementById('number-display');
+    const hdrEl  = document.getElementById('tv-branch');
+
+    // 2) Validate org
+    if (!orgId) {
+      dispEl.textContent = 'Invalid link';
+      return;
+    }
+    hdrEl.textContent = `Organization: ${orgId}`;
+
+    // 3) If no ticketId yet, create one via transaction
+    if (!ticketId) {
+      try {
+        const baseRef    = db.collection('organizations').doc(orgId);
+        const counterRef = baseRef.collection('counters').doc('current');
+        const ticketsCol = baseRef.collection('tickets');
+
+        // Atomically bump & create
+        const result = await db.runTransaction(async tx => {
+          const ctr = await tx.get(counterRef);
+          let next = 1;
+          if (ctr.exists && ctr.data().current) {
+            next = ctr.data().current + 1;
+            tx.update(counterRef, { current: next });
+          } else {
+            tx.set(counterRef, { current: 1 });
+          }
+
+          const newDoc = ticketsCol.doc();
+          tx.set(newDoc, {
+            number:    next,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            servedAt:  null,
+            skippedAt: null,
+            counter:   null
+          });
+
+          return { id: newDoc.id };
+        });
+
+        ticketId = result.id;
+        // push the ticketId into the URL (so refresh won’t re-create)
+        params.set('ticket', ticketId);
+        history.replaceState(null, '', `${location.pathname}?${params}`);
+
+      } catch (err) {
+        console.error('Error creating ticket:', err);
+        dispEl.textContent = 'Failed to join queue';
+        return;
       }
-      // persist ticket record
-      const tRef = db.collection('queues').doc(orgId)
-                     .collection('tickets').doc();
-      tx.set(tRef, {
-        number:    nextNum,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        status:    'waiting'
-      });
-      return nextNum;
+    }
+
+    // 4) Listen to your ticket doc
+    const ticketRef = db
+      .collection('organizations').doc(orgId)
+      .collection('tickets').doc(ticketId);
+
+    ticketRef.onSnapshot(doc => {
+      if (!doc.exists) {
+        dispEl.textContent = 'Ticket not found';
+        return;
+      }
+      const data = doc.data();
+      dispEl.textContent = data.number != null
+        ? String(data.number)
+        : '—';
+    }, err => {
+      console.error('TV listener error:', err);
+      dispEl.textContent = 'Error loading ticket';
     });
-    sessionStorage.setItem(`pq-${orgId}-ticket`, ticketNum);
   }
 
-  // display
-  disp.textContent = ticketNum;
-});
+  // ————————— DOM Ready —————————
+  document.addEventListener('DOMContentLoaded', initTV);
+})();
