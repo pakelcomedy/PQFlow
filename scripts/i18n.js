@@ -17,7 +17,7 @@ function setLang(lang) {
 async function loadAndApply(lang) {
   try {
     // tanpa slash depan, jadi relative ke folder HTML (atau ke base href jika dipakai)
-    const res = await fetch(`lang/${lang}.json`);
+    const res = await fetch(`lang/PQFlow/${lang}.json`);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     document.querySelectorAll('[data-i18n]').forEach(el => {
