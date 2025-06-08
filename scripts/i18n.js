@@ -16,11 +16,12 @@ function setLang(lang) {
 
 async function loadAndApply(lang) {
   try {
-    const res = await fetch(`/lang/${lang}.json`);
+    // tanpa slash depan, jadi relative ke folder HTML (atau ke base href jika dipakai)
+    const res = await fetch(`lang/${lang}.json`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.getAttribute('data-i18n');
-      // mendukung nested keys: "nav.howItWorks"
       const text = key.split('.').reduce((o,i) => o?.[i], data);
       if (text) el.innerText = text;
     });
@@ -32,13 +33,12 @@ async function loadAndApply(lang) {
 function updateButtons(activeLang) {
   supportedLangs.forEach(lang => {
     const btn = document.getElementById(`lang-${lang}`);
-    const isActive = lang === activeLang;
+    const isActive = (lang === activeLang);
     btn.classList.toggle('active', isActive);
     btn.setAttribute('aria-pressed', isActive);
   });
 }
 
-// Inisialisasi saat DOM siap
 document.addEventListener('DOMContentLoaded', () => {
   const lang = getLang();
   loadAndApply(lang);
