@@ -19,7 +19,7 @@
   const btnCall         = document.getElementById('btn-call');
   const btnSkip         = document.getElementById('btn-skip');
   const btnReset        = document.getElementById('btn-reset');
-  const btnBack         = document.getElementById('btn-back');
+  // const btnBack         = document.getElementById('btn-back');
   const currentNumberEl = document.getElementById('current-number');
   const waitingBody     = document.getElementById('waiting-body');
 
@@ -80,7 +80,7 @@
   // CONTROLS
   // ————————————————————————————————
   function initControls() {
-    [btnCall, btnSkip, btnReset, btnBack].forEach(b => b.disabled = false);
+    [btnCall, btnSkip, btnReset].forEach(b => b.disabled = false);
 
     // CALL NEXT: pick earliest, mark servedAt + counter
     btnCall.addEventListener('click', async () => {
@@ -124,13 +124,13 @@
     });
 
     // BACK: remove skippedAt
-    btnBack.addEventListener('click', async () => {
-      if (!lastCalledTicket) return;
-      await lastCalledTicket.ref.update({
-        skippedAt: firebase.firestore.FieldValue.delete()
-      });
-      currentNumberEl.textContent = lastCalledTicket.data.number;
-    });
+    // btnBack.addEventListener('click', async () => {
+    //   if (!lastCalledTicket) return;
+    //   await lastCalledTicket.ref.update({
+    //     skippedAt: firebase.firestore.FieldValue.delete()
+    //   });
+    //   currentNumberEl.textContent = lastCalledTicket.data.number;
+    // });
 
     // RESET: mark all unserved as resetAt
     btnReset.addEventListener('click', async () => {
