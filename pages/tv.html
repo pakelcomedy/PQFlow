@@ -11,25 +11,73 @@
 </head>
 <body class="tv-dark">
   <div id="tv-container">
+    <!-- HEADER -->
     <header id="tv-header">
-      <h1 id="tv-branch"></h1>
+      <h1 id="tv-org-name" class="org-name">Organization: —</h1>
+      <div id="tv-clock" class="clock">--:--:--</div>
     </header>
-    <main id="tv-main">
-      <div id="number-display">—</div>
+
+    <!-- MAIN GRID -->
+    <main id="tv-main" class="grid-container">
+      <!-- Your Ticket Card -->
+      <section id="your-ticket" class="card ticket-card">
+        <div class="card-header">
+          <!-- Ikon tiket -->
+          <svg class="icon ticket-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M2 7v10h20V7H2zm18 2h-4v2h4v-2zm0 4h-4v2h4v-2zM8 9H4v2h4V9zm0 4H4v2h4v-2z"/>
+          </svg>
+          <span class="label">Your Ticket</span>
+        </div>
+        <div class="card-body">
+          <span id="ticket-display" class="number">—</span>
+        </div>
+      </section>
+
+      <!-- Circular Progress Card -->
+      <section id="progress-container" class="card progress-card">
+        <div class="card-header">
+          <!-- Ikon progress -->
+          <svg class="icon progress-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 17.93V20a8 8 0 1 1 0-16v1.07A7 7 0 1 0 13 19.93z"/>
+          </svg>
+          <span class="label">Progress</span>
+        </div>
+        <div class="card-body">
+          <div class="circle-wrapper">
+            <svg class="progress-circle" viewBox="0 0 100 100">
+              <!-- Track -->
+              <circle class="circle-bg" cx="50" cy="50" r="45" />
+              <!-- Fill (stroke-dashoffset akan di‐animate via CSS/JS) -->
+              <circle class="circle-fill" cx="50" cy="50" r="45" />
+            </svg>
+            <div class="progress-text">
+              <span id="progress-percent">0%</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Now Serving Card -->
+      <section id="now-serving" class="card serving-card">
+        <div class="card-header">
+          <!-- Ikon panggilan -->
+          <svg class="icon serving-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 2L2 7v6c0 5 3.8 9.6 9 10 5.2-.4 9-5 9-10V7l-10-5zM11 17h2v2h-2v-2zm0-10h2v8h-2V7z"/>
+          </svg>
+          <span class="label">Now Serving</span>
+        </div>
+        <div class="card-body">
+          <span id="served-number" class="number">—</span>
+        </div>
+      </section>
     </main>
-    <footer id="tv-footer">
-      <div id="tv-clock">--:--:--</div>
-    </footer>
   </div>
 
-  <!-- 1) Firebase SDKs -->
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
-
-  <!-- 2) Your Firestore Init (defines window.db) -->
+  <!-- Firestore Init & TV Mode Logic -->
   <script src="../scripts/firestore.js"></script>
-
-  <!-- 3) TV Mode logic -->
   <script src="../scripts/tv.js"></script>
 </body>
 </html>

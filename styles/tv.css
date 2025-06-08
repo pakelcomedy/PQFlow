@@ -1,65 +1,291 @@
-/* ==========================================================================
-   TV Mode Styles (Full Black for Battery Savings)
-   File: styles/tv.css
-   ========================================================================== */
+/* ========================================================================
+   TV Mode CSS — PQFlow Pro
+   Tema: Dark, Monokrom, Hemat Baterai
+   ======================================================================== */
 
-/* Reset & Base */
-* {
+/* 1. RESET & BASE
+   ---------------------------------------------------------- */
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-html, body {
-  width: 100%;
-  height: 100%;
+html {
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 1.4;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+body {
+  background-color: #121212;
+  color: #eee;
   overflow: hidden;
-  font-family: 'Poppins', sans-serif;
-  background-color: #000;
-  color: #fff;
+  height: 100vh;
+  width: 100vw;
 }
 
-/* Root container: vertical flex */
+/* 2. UTILITY CLASSES
+   ---------------------------------------------------------- */
+.hidden { display: none !important; }
+.sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0);
+  white-space: nowrap; border: 0;
+}
+.flex { display: flex; }
+.grid { display: grid; }
+.center { justify-content: center; align-items: center; }
+.full { width: 100%; height: 100%; }
+.container {
+  position: relative;
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* 3. VARIABLES (via custom properties)
+   ---------------------------------------------------------- */
+:root {
+  /* Colors */
+  --bg: #121212;
+  --card-bg: #1f1f1f;
+  --text: #eee;
+  --text-light: #bbb;
+  --accent: #888;
+  --border: #333;
+
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+
+  /* Typography */
+  --font-sans: 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'Courier New', monospace;
+  --fs-small: 0.875rem;
+  --fs-base: 1rem;
+  --fs-lg: 1.25rem;
+  --fs-xl: 2rem;
+  --fs-xxl: 3rem;
+}
+
+/* 4. LAYOUT: TV-CONTAINER, HEADER, MAIN, FOOTER
+   ---------------------------------------------------------- */
 #tv-container {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100vh;
+  background: var(--bg);
+}
+
+#tv-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--border);
+}
+
+.org-name {
+  font-size: var(--fs-xl);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.clock {
+  font-family: var(--font-mono);
+  font-size: var(--fs-lg);
+  color: var(--accent);
+}
+
+#tv-main {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+  overflow: hidden;
+}
+
+#tv-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-sm);
+  border-top: 1px solid var(--border);
+}
+
+/* 5. CARD BASE STYLES
+   ---------------------------------------------------------- */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--space-sm);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.5);
   display: flex;
   flex-direction: column;
-  height: 100%;
+  padding: var(--space-md);
+  transition: background 0.2s ease;
+  will-change: opacity, transform;
 }
 
-/* Main Number Display (fills available space) */
-#tv-main {
+.card:hover {
+  background: #2a2a2a;
+}
+
+/* 6. CARD HEADER & ICONS
+   ---------------------------------------------------------- */
+.card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--space-sm);
+}
+
+.card-header .icon {
+  width: 1.5em;
+  height: 1.5em;
+  margin-right: var(--space-sm);
+  fill: var(--accent);
+  flex-shrink: 0;
+}
+
+.card-header .label {
+  font-size: var(--fs-base);
+  font-weight: 500;
+  color: var(--text-light);
+}
+
+/* 7. CARD BODY: NUMBERS & TYPOGRAPHY
+   ---------------------------------------------------------- */
+.card-body {
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #000;
 }
-#number-display {
-  font-size: 14rem;
+
+.number {
+  font-size: var(--fs-xxl);
   font-weight: 700;
-  line-height: 1;
-  text-shadow: none;
-  animation: pulse 2s ease-in-out infinite;
+  color: var(--text);
 }
 
-/* Footer Clock */
-#tv-footer {
-  text-align: center;
-  padding: 0.5rem 0;
-  background-color: #000;
-}
-#tv-clock {
-  font-size: 1.5rem;
-  font-family: 'Roboto Mono', monospace;
+/* 8. SPECIFICS: YOUR TICKET CARD
+   ---------------------------------------------------------- */
+.ticket-card .number {
+  font-size: 4rem;
+  letter-spacing: 2px;
 }
 
-/* Pulse animation (very subtle) */
-@keyframes pulse {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50%      { transform: scale(1.02); opacity: 0.9; }
+/* 9. SPECIFICS: NOW SERVING CARD
+   ---------------------------------------------------------- */
+.serving-card .number {
+  font-size: 4rem;
+  letter-spacing: 2px;
 }
 
-/* Responsive Scaling */
+/* 10. CIRCULAR PROGRESS CARD
+    ---------------------------------------------------------- */
+.progress-card {
+  position: relative;
+}
+
+.circle-wrapper {
+  position: relative;
+  width: 150px;
+  height: 150px;
+}
+
+.progress-circle {
+  transform: rotate(-90deg);
+  width: 100%;
+  height: 100%;
+}
+
+.circle-bg,
+.circle-fill {
+  cx: 50;
+  cy: 50;
+  r: 45;
+  fill: none;
+  stroke-width: 10;
+}
+
+.circle-bg {
+  stroke: var(--border);
+}
+
+.circle-fill {
+  stroke: var(--accent);
+  stroke-dasharray: 283;       /* 2πr */
+  stroke-dashoffset: 283;      /* start at 0% */
+  transition: stroke-dashoffset 0.5s linear;
+}
+
+.progress-text {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* 11. RESPONSIVE & ACCESSIBILITY
+    ---------------------------------------------------------- */
 @media (max-width: 768px) {
-  #number-display { font-size: 8rem; }
-  #tv-clock      { font-size: 1.25rem; }
+  .org-name { font-size: var(--fs-lg); }
+  .number { font-size: var(--fs-xl); }
+  .circle-wrapper { width: 120px; height: 120px; }
 }
+@media (max-width: 480px) {
+  #tv-header, #tv-footer { flex-direction: column; }
+  .org-name, .clock { margin-bottom: var(--space-sm); }
+}
+
+/* 12. PRINT & VISIBILITY
+    ---------------------------------------------------------- */
+@media print {
+  body { background: #fff; color: #000; }
+  .card { border: 1px solid #ccc; box-shadow: none; }
+  .circle-fill { display: none; }
+}
+
+/* 13. FOCUS STATES (keyboard nav)
+    ---------------------------------------------------------- */
+:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* 14. HIGH CONTRAST MODE
+    ---------------------------------------------------------- */
+@media (prefers-contrast: high) {
+  :root {
+    --text: #fff;
+    --card-bg: #000;
+    --border: #fff;
+  }
+}
+
+/* 15. DARK MODE OVERRIDE (jika perlu)
+    ---------------------------------------------------------- */
+@media (prefers-color-scheme: dark) {
+  body { background: var(--bg); color: var(--text); }
+}
+
+/* ========================================================================
+   You now punya CSS modular ~200 baris yang sangat komprehensif,
+   siap di‑expand dengan komentar atau utilitas lain sampai 700 baris.
+   Kalau butuh lebih banyak, kita bisa tambahkan section:  
+   - Animasi subtle (pulse, fade-in)  
+   - Helper classes (mt-*, px-*)  
+   - Utilities for text overflow, scroll bars, etc.  
+   Tinggal bilang, ya!
+   ======================================================================== */
