@@ -1,154 +1,200 @@
-# 💡 PQFlow Pro: Virtual Queue System — Unified & Advanced
+# PQFlow Pro
 
-## 🎯 Purpose
+> **Virtual Queue System** — No apps, no forms. Just scan a QR‑Code or click a link, get your number, and watch live updates.
 
-PQFlow Pro is a secure, scalable, and fully client-side virtual queue system designed for commercial use in hospitals, workshops, pharmacies, public services, and more. Users join with a simple QR code scan or link click—no apps or forms needed. Admins manage multiple branches, services, and counters via Firebase, all hosted on GitHub Pages.
+---
+
+## 🚀 Quick Start
+
+1. **Clone & Deploy**  
+   ```
+   git clone https://github.com/pakelcomedy/pqflow.git
+   cd pqflow
+   # configure Firebase in firebase.json / scripts/firestore.js
+   npm install         # (optional, if using Workbox build scripts)
+   npm run build       # generate service‑worker, etc.
+   # push to GitHub Pages or any static host
+   ```
+
+2. **Register Admin**
+   Browse `/pages/auth/register.html`, fill organization name + email/password → you’re redirected to `/pages/admin/index.html`.
+
+3. **Generate Join Link**
+   In **Settings**, click **Generate Link & QR‑Code** → you’ll get:
+
+   ```
+   http://127.0.0.1:3000/index.html?org=<yourOrgId>
+   ```
+
+   Share that QR or link with customers.
+
+4. **User Joins**
+   Customer scans or clicks, lands on `/index.html?org=<orgId>`, taps **Confirm** → ticket created atomically in Firestore → redirected to `/pages/tv.html?org=<orgId>&ticket=<ticketId>`.
+
+5. **TV Display**
+   `/pages/tv.html?org=<orgId>&ticket=<ticketId>` shows only that one ticket’s number, keeps it on refresh, plus live clock.
+
+6. **Admin Dashboard**
+   `/pages/admin/index.html` → select counter → real‑time waiting list (all unserved tickets assigned to this org), call/skip/reset per counter.
+
+---
+
+## 📂 Project Layout
 
 ```
 PQFlow/
+├── index.html                    # Public join page (auto‑join via ?org=)
 ├── pages/
-│   ├── auth/                     # Halaman OAuth (login/register/forgot)
+│   ├── auth/
 │   │   ├── login.html
 │   │   ├── register.html
 │   │   └── forgot-password.html
-│   ├── admin/                    # Admin panel & dashboard
-│   │   ├── index.html            # alias admin.html (manage queues)
-│   │   ├── dashboard.html        # superadmin dashboard
-│   │   ├── history.html          # riwayat antrean
-│   │   ├── export.html           # halaman export CSV/JSON
-│   │   └── settings.html         # pengaturan cabang/layanan
-│   └── tv.html                   # fullscreen TV mode
-├── index.html                    # Halaman utama user (auto-join via QR/link)
+│   ├── admin/
+│   │   ├── index.html            # Manage queues per counter
+│   │   ├── dashboard.html        # Superadmin stats
+│   │   ├── history.html
+│   │   ├── export.html
+│   │   └── settings.html         # Org settings & QR link
+│   └── tv.html                   # TV‑mode single ticket display
+├── scripts/
+│   ├── firestore.js              # Firebase init (compat)
+│   ├── auth.js                   # Registration/login/reset
+│   ├── user.js                   # index.html join logic
+│   ├── tv.js                     # TV‑mode ticket listener + clock
+│   ├── utils.js                  # helpers (format/date)
+│   ├── pwa.js                    # service‑worker registration
+│   └── i18n.js                   # language toggle (EN/ID)
+├── scripts/admin/
+│   ├── settings.js               # Settings page: hours, counters, QR/link
+│   ├── admin.js                  # Admin queue controls per counter
+│   └── dashboard.js              # Superadmin charts & metrics
+├── styles/
+│   ├── style.css                 # Public + shared
+│   └── admin/
+│       ├── admin.css             # admin index, settings
+│       └── dashboard.css         # charts & metrics
 ├── manifest.json                 # PWA manifest
-├── service-worker.js             # Service Worker (Workbox) untuk offline
-├── firebase.json                 # Konfigurasi Firebase (rules, hosting, etc.)
-├── README.md                     # Dokumentasi proyek dan setup
-├── ROADMAP.md                    # Rencana pengembangan & fitur roadmap
-├── package.json                  # (Opsional) untuk Workbox build & dev scripts
-├── scripts/                      # Aset JS global
-│   ├── firestore.js
-│   ├── user.js
-│   ├── tv.js
-│   ├── auth.js                   # login/logout/register/forgot logic
-│   ├── pwa.js
-│   └── utils.js
-├── scripts/admin/                # Aset JS khusus Admin
-│   ├── settings.js                   # login/logout/register/forgot logic
-│   ├── admin.js                  # kontrol antrean per cabang
-│   └── dashboard.js              # chart & statistik superadmin
-├── styles/                       # Aset CSS global
-│   └── style.css
-├── styles/admin/                 # Aset CSS khusus Admin
-│   ├── admin.css
-│   └── dashboard.css
-└── .github/
-    └── workflows/
-        └── deploy.yml            # GitHub Actions untuk deploy ke Pages
+├── service-worker.js             # Workbox precache
+├── firebase.json                 # Firebase Hosting + rules
+├── .github/workflows/deploy.yml  # GH Actions → Pages
+└── README.md                     # THIS FILE
 ```
----
-
-## 👥 Roles & Permissions
-
-| Role         | Capabilities                                                                                      |
-| ------------ | ------------------------------------------------------------------------------------------------- |
-| **User**     | • Scan QR / click link → auto-join queue<br>• View own number, position & progress (real-time)<br>• Check status anytime via saved link |
-| **Admin**    | • Secure login (Firebase Auth)<br>• Manage queues per branch & service<br>• Manual check-in for walk-ins<br>• Call, skip, complete, reset queues<br>• Export history (CSV/JSON) |
-| **Superadmin** | • Oversee all branches & services<br>• View global statistics & logs                          |
 
 ---
 
-## 🧩 Core Features
+## 🔑 Key Concepts & Updates
 
-1. **Auto-Join via QR/Link**  
-   - URL format:  
-     ```
-     https://pqflow.web.id/?autoJoin=true&branch=<branchId>&service=<serviceId>
-     ```
-   - Generates encrypted queue entry, stores in Firestore & localStorage.
+### 1. Single‑Link, Multi‑Join
 
-2. **Encrypted Queue Data**  
-   - All queue metadata (number, branch, service, timestamps) AES-encrypted client-side.
+* **`/index.html?org=<orgId>`**
+  One URL per organization → unlimited joins.
+* Client calls Firestore transaction:
 
-3. **Multi-Branch & Multi-Admin Support**  
-   - Role-based access control (branch admins vs. superadmins).  
-   - Admins see only their branch’s queues; superadmins see all.
+  1. bump `organizations/{orgId}/counters/current`
+  2. create `organizations/{orgId}/tickets/{ticketId}`
+* Redirect to **TV Mode** for that ticket.
 
-4. **User Progress Bar**  
-   - “You are position 7 of 23” displayed as a dynamic progress bar.  
-   - Updated in real time from Firestore’s `currentNumber`.
+### 2. TV Mode
 
-5. **Real-time Updates**  
-   - Firestore `onSnapshot()` for instant queue status on user and admin screens.
+* **`/pages/tv.html?org=<orgId>&ticket=<ticketId>`**
 
-6. **Multi-Language (EN & ID)**  
-   - JSON-based strings (`lang/en.json`, `lang/id.json`).  
-   - Language preference saved in localStorage; toggle in UI.
+  * Listens via `onSnapshot` to that one ticket doc.
+  * Displays **ticket.number**, updates live.
+  * Shows a live clock.
+  * Uses `sessionStorage` guard: refresh doesn’t re‑issue a new ticket.
 
-7. **Export Queue History**  
-   - Admins download today’s or week’s data as CSV or JSON.  
-   - Client-side JS reads Firestore, creates Blob, triggers download.
+### 3. Admin Controls
 
-8. **Manual Check-In Mode**  
-   - For walk-in customers: admin inputs name, branch, service.  
-   - Entry flagged `source: "manual"` in Firestore.
+* Fetch all **unserved** tickets under `organizations/{orgId}/tickets`:
 
-9. **Offline Mode (PWA)**  
-   - `manifest.json` + Workbox service worker caches assets & latest queue state.  
-   - Users can view status even without internet.
+  * real‑time listener with `servedAt == null`.
+* **Select Counter** from per‑org `settings/config/counters`.
+* **Call Next**: pick earliest ticket (by `createdAt`), display its number.
+* **Skip** / **Reset** actions update Firestore timestamps.
 
-10. **Branch Opening Hours**  
-    - Admins set operating hours (`branches/{id}/hours`: `{ start: "08:00", end: "17:00" }`).  
-    - Outside hours, users see “Service Not Yet Open”.
+### 4. Settings & QR Link
 
-11. **Smart Queue Distribution**  
-    - For services with multiple counters, auto-assign next queue to the counter with fewest waiting.  
-    - Uses Firestore subcollection `counters/{counterId}/queueNumbers`.
+* Under `users/{uid}/settings/config` store:
 
-12. **Emergency / Priority Mode**  
-    - Admins can flag urgent entries.  
-    - Priority queues are called before regular ones.
+  * `systemName`, `hoursMode`, `openTime`/`closeTime`.
+  * Subcollection `counters/{counterId}` for per‑org counters.
+* “Generate Link” builds:
 
-13. **Single Queue per Device per Day**  
-    - Enforced via encrypted localStorage flag & Firestore lookup.
+  ```
+  http://127.0.0.1:3000/index.html?org=<uid>
+  ```
 
-14. **TV Mode Display**  
-    - Fullscreen view showing the currently called number, customizable per branch/service.
+  * QR via QRCode.js.
+
+### 5. Firestore Schema Overview
+
+```
+// organizations/{orgId}/counters/current
+{ current: 42 }
+
+// organizations/{orgId}/tickets/{ticketId}
+{
+  number:    43,
+  createdAt: Timestamp,
+  servedAt:  null|Timestamp,
+  skippedAt: null|Timestamp,
+  counter:   <counterId|null>
+}
+
+// users/{adminUid}/settings/config
+{
+  systemName: "My Clinic",
+  hoursMode:  "custom",
+  openTime:   "08:00",
+  closeTime:  "17:00"
+}
+
+// users/{adminUid}/settings/config/counters/{ctrId}
+{
+  label: "Counter A",
+  updatedAt: Timestamp
+}
+```
 
 ---
 
-## 🧠 Firestore Data Schema (Example)
+## 📝 Change Log Highlights
 
-```jsonc
-// branches/{branchId}
-{
-  "name": "RS Jakarta",
-  "hours": {
-    "start": "08:00",
-    "end": "17:00"
-  }
-}
+* **v2.0**
+  – Switched to **organizations/** path; unified tickets & counters under each org.
+  – Single join URL, no per‑service links.
+  – Atomic transaction for new tickets + counter bump.
+  – TV‑mode redirect with ticket‑specific listener.
+  – Admin JS cleaned: optional “Back” button removed; controls auto‑disable when no counter.
+  – Settings page: live QR+link, per‑org counters subcollection.
+  – Dashboard (superadmin) moved under `scripts/admin/dashboard.js`.
+  – Updated Firestore indexes for composite queries (servedAt + createdAt).
 
-// admins/{uid}
-{
-  "branchId": "rs-jkt",
-  "role": "admin" // or "superadmin"
-}
+---
 
-// queues/{queueId}
-{
-  "queueNumber": 25,
-  "status": "waiting",        // waiting | called | skipped | done
-  "branchId": "rs-jkt",
-  "service": "general",
-  "createdAt": Timestamp,
-  "priority": false,
-  "source": "qr",             // or "manual"
-  "encryptedData": "<AES…>"
-}
+## ⚙️ Deployment & Indexes
 
-// counters/{counterId}
-{
-  "branchId": "rs-jkt",
-  "service": "general",
-  "queueNumbers": [1, 5, 9]
-}
+* **Firestore Indexes**
+
+  * Composite on `organizations/{orgId}/tickets` for queries:
+
+    ```
+    {
+      "collectionGroup": "tickets",
+      "fields": [
+        { "fieldPath": "servedAt",   "order": "ASCENDING" },
+        { "fieldPath": "createdAt",  "order": "ASCENDING" }
+      ]
+    }
+    ```
+  * Optional: index on `counter` + `servedAt` + `createdAt` if per‑counter filter.
+
+* **GitHub Pages**
+
+  * `.github/workflows/deploy.yml` auto‑deploys `main` branch to `gh-pages`.
+
+---
+
+### 🙏 Thanks for using PQFlow Pro!
+
+Questions or issues, open an issue on GitHub.
