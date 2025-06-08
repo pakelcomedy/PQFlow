@@ -4,10 +4,7 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- pastikan base mengarah ke folder repo -->
-  <base href="/PQFlow/" />
-
-  <title data-i18n="title">PQFlow Pro — Virtual Queue System</title>
+  <title data-i18n="siteTitle">PQFlow Pro — Virtual Queue System</title>
 
   <!-- PWA Manifest -->
   <link rel="manifest" href="manifest.json" />
@@ -86,7 +83,9 @@
       <div class="feature-cards">
         <div class="feature-card">
           <h3 data-i18n="features.realTime.title">Real-Time Updates</h3>
-          <p data-i18n="features.realTime.desc">Live ticket calls and position tracking powered by Firebase.</p>
+          <p data-i18n="features.realTime.desc">
+            Live ticket calls and position tracking powered by Firebase.
+          </p>
         </div>
         <div class="feature-card">
           <h3 data-i18n="features.multiCounter.title">Multiple Counters</h3>
@@ -109,9 +108,7 @@
     <div class="container footer-grid">
       <div class="footer-col">
         <a href="index.html" class="logo" data-i18n="logo">PQFlow Pro</a>
-        <p data-i18n="footer.copyright">
-          © 2025 PQFlow Pro. All rights reserved.
-        </p>
+        <p data-i18n="footer.copy">© 2025 PQFlow Pro. All rights reserved.</p>
       </div>
       <div class="footer-col">
         <h4 data-i18n="footer.linksTitle">Quick Links</h4>
@@ -122,10 +119,12 @@
         </ul>
       </div>
       <div class="footer-col">
-        <h4 data-i18n="footer.language">Language</h4>
+        <label for="langSelector" data-i18n="footer.language">Language</label>
         <div class="footer-actions">
-          <button id="lang-en" class="lang-btn" aria-pressed="false" data-i18n="lang.en">EN</button>
-          <button id="lang-id" class="lang-btn" aria-pressed="false" data-i18n="lang.id">ID</button>
+          <select id="langSelector">
+            <option value="en" data-i18n="lang.en">EN</option>
+            <option value="id" data-i18n="lang.id">ID</option>
+          </select>
         </div>
       </div>
     </div>
@@ -142,7 +141,7 @@
   <!-- User Script: handles scan/join -->
   <script src="scripts/user.js"></script>
 
-  <!-- Misc utilities -->
+  <!-- Utils & i18n -->
   <script src="scripts/utils.js"></script>
   <script src="scripts/i18n.js"></script>
   <script src="scripts/pwa.js"></script>
