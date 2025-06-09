@@ -1,7 +1,7 @@
 (() => {
   const DEFAULT_LANG = 'en';
   const STORAGE_KEY  = 'lang';
-  const DICT_FOLDER  = '/lang/';
+  const DICT_FOLDER  = 'lang/';       // <<-- diubah
   const TEXT_ATTR    = 'data-i18n';
   const PH_ATTR      = 'data-i18n-placeholder';
 
@@ -15,7 +15,7 @@
 
     try {
       const res = await fetch(dictUrl(lang), { cache: 'no-cache' });
-      if (!res.ok) throw new Error(res.status);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const dict = await res.json();
       cache.set(lang, dict);
       return dict;
