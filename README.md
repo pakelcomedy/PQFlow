@@ -4,6 +4,8 @@
 
 ---
 
+**Stuck/Mandek/Malas**
+
 ## 🚀 Quick Start
 
 1. **Clone & Deploy**  
