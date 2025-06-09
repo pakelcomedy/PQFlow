@@ -15,19 +15,37 @@
 </head>
 <body>
   <!-- Accessibility Skip Link -->
-  <a href="#main-content" class="skip-link" data-i18n="skipLink">Skip to main content</a>
+  <a href="#main-content" class="skip-link" data-i18n="skipLink">
+    Skip to main content
+  </a>
 
   <!-- HEADER -->
   <header class="site-header" role="banner">
     <div class="container">
-      <a href="index.html" class="logo" aria-label="PQFlow Pro Home" data-i18n="logo">PQFlow Pro</a>
-      <button class="mobile-nav-toggle" aria-controls="main-nav" aria-expanded="false">
-        <span class="sr-only" data-i18n="toggleNav">Toggle navigation</span>☰
+      <a 
+        href="index.html" 
+        class="logo" 
+        aria-label="PQFlow Pro Home" 
+        data-i18n="logo"
+      >
+        PQFlow Pro
+      </a>
+      <button 
+        class="mobile-nav-toggle" 
+        aria-controls="main-nav" 
+        aria-expanded="false"
+      >
+        <span class="sr-only" data-i18n="toggleNav">Toggle navigation</span>
+        ☰
       </button>
       <nav id="main-nav" class="main-nav" role="navigation">
         <ul>
-          <li><a href="#how-it-works" data-i18n="nav.howItWorks">How It Works</a></li>
-          <li><a href="#features" data-i18n="nav.features">Features</a></li>
+          <li>
+            <a href="#how-it-works" data-i18n="nav.howItWorks">How It Works</a>
+          </li>
+          <li>
+            <a href="#features" data-i18n="nav.features">Features</a>
+          </li>
         </ul>
       </nav>
     </div>
@@ -37,7 +55,9 @@
   <section class="hero" aria-labelledby="hero-title">
     <div class="container hero-grid">
       <div class="hero-copy">
-        <h1 id="hero-title" data-i18n="hero.title">Welcome to PQFlow Pro</h1>
+        <h1 id="hero-title" data-i18n="hero.title">
+          Welcome to PQFlow Pro
+        </h1>
         <p data-i18n="hero.subtitle">
           A modern, hassle-free virtual queue experience — join instantly and track your position in real time.
         </p>
@@ -47,13 +67,24 @@
 
   <main id="main-content">
     <!-- TICKET DISPLAY SECTION -->
-    <section id="ticket-section" class="ticket-section container" style="display: none;" aria-labelledby="ticket-title">
-      <h2 id="ticket-title" data-i18n="ticket.title">Your Queue Number</h2>
+    <section 
+      id="ticket-section" 
+      class="ticket-section container" 
+      style="display: none;" 
+      aria-labelledby="ticket-title"
+    >
+      <h2 id="ticket-title" data-i18n="ticket.title">
+        Your Queue Number
+      </h2>
       <div id="ticket-display" class="ticket-display">—</div>
     </section>
 
     <!-- HOW IT WORKS -->
-    <section id="how-it-works" class="how-it-works container" aria-labelledby="how-title">
+    <section 
+      id="how-it-works" 
+      class="how-it-works container" 
+      aria-labelledby="how-title"
+    >
       <h2 id="how-title" data-i18n="how.title">How It Works</h2>
       <ol class="steps-list">
         <li>
@@ -78,23 +109,35 @@
     </section>
 
     <!-- FEATURES -->
-    <section id="features" class="features container" aria-labelledby="features-title">
-      <h2 id="features-title" data-i18n="features.title">Key Features</h2>
+    <section 
+      id="features" 
+      class="features container" 
+      aria-labelledby="features-title"
+    >
+      <h2 id="features-title" data-i18n="features.title">
+        Key Features
+      </h2>
       <div class="feature-cards">
         <div class="feature-card">
-          <h3 data-i18n="features.realTime.title">Real-Time Updates</h3>
+          <h3 data-i18n="features.realTime.title">
+            Real-Time Updates
+          </h3>
           <p data-i18n="features.realTime.desc">
             Live ticket calls and position tracking powered by Firebase.
           </p>
         </div>
         <div class="feature-card">
-          <h3 data-i18n="features.multiCounter.title">Multiple Counters</h3>
+          <h3 data-i18n="features.multiCounter.title">
+            Multiple Counters
+          </h3>
           <p data-i18n="features.multiCounter.desc">
             Tickets can be served by any available counter in your organization.
           </p>
         </div>
         <div class="feature-card">
-          <h3 data-i18n="features.simpleAdmin.title">Simple Admin</h3>
+          <h3 data-i18n="features.simpleAdmin.title">
+            Simple Admin
+          </h3>
           <p data-i18n="features.simpleAdmin.desc">
             Admins can call, skip, or reset tickets from a web dashboard.
           </p>
@@ -107,23 +150,46 @@
   <footer class="site-footer" role="contentinfo">
     <div class="container footer-grid">
       <div class="footer-col">
-        <a href="index.html" class="logo" data-i18n="logo">PQFlow Pro</a>
-        <p data-i18n="footer.copy">© 2025 PQFlow Pro. All rights reserved.</p>
+        <a href="index.html" class="logo" data-i18n="logo">
+          PQFlow Pro
+        </a>
+        <p data-i18n="footer.copy">
+          © 2025 PQFlow Pro. All rights reserved.
+        </p>
       </div>
+
       <div class="footer-col">
         <h4 data-i18n="footer.linksTitle">Quick Links</h4>
         <ul>
-          <li><a href="#how-it-works" data-i18n="nav.howItWorks">How It Works</a></li>
-          <li><a href="#features" data-i18n="nav.features">Features</a></li>
-          <li><a href="pages/admin/index.html" data-i18n="footer.admin">Admin</a></li>
+          <li>
+            <a href="#how-it-works" data-i18n="nav.howItWorks">
+              How It Works
+            </a>
+          </li>
+          <li>
+            <a href="#features" data-i18n="nav.features">Features</a>
+          </li>
+          <li>
+            <a href="pages/admin/index.html" data-i18n="footer.admin">
+              Admin
+            </a>
+          </li>
         </ul>
       </div>
+
       <div class="footer-col">
-        <label for="langSelector" data-i18n="footer.language">Language</label>
-        <div class="footer-actions">
+        <h4 data-i18n="footer.language">Language</h4>
+        <div class="lang-selector">
+          <label 
+            for="langSelector" 
+            class="sr-only" 
+            data-i18n="footer.languageLabel"
+          >
+            Select language
+          </label>
           <select id="langSelector">
-            <option value="en" data-i18n="lang.en">EN</option>
-            <option value="id" data-i18n="lang.id">ID</option>
+            <option value="en" data-i18n="lang.en">English</option>
+            <option value="id" data-i18n="lang.id">Bahasa Indonesia</option>
           </select>
         </div>
       </div>

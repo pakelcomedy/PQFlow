@@ -1,9 +1,9 @@
 (() => {
   const DEFAULT_LANG = 'en';
   const STORAGE_KEY  = 'lang';
-  const DICT_FOLDER  = 'lang/';      // folder JSON-mu
-  const DATA_ATTR    = 'data-i18n';
-  const PLACEHOLDER  = 'data-i18n-placeholder';
+  const DICT_FOLDER  = '/lang/';
+  const TEXT_ATTR    = 'data-i18n';
+  const PH_ATTR      = 'data-i18n-placeholder';
 
   const cache = new Map();
   let currentLang = null;
@@ -12,32 +12,32 @@
 
   async function fetchDict(lang) {
     if (cache.has(lang)) return cache.get(lang);
+
     try {
       const res = await fetch(dictUrl(lang), { cache: 'no-cache' });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      if (!res.ok) throw new Error(res.status);
       const dict = await res.json();
       cache.set(lang, dict);
-      console.info(`i18n: loaded "${lang}"`);
       return dict;
     } catch (err) {
-      console.warn(`i18n: failed to load "${lang}" (${err.message})`);
+      console.warn(`i18n: gagal load "${lang}", fallback ke "${DEFAULT_LANG}"`);
       if (lang !== DEFAULT_LANG) {
-        return await fetchDict(DEFAULT_LANG);
+        return fetchDict(DEFAULT_LANG);
       }
       return {};
     }
   }
 
   function applyText(dict) {
-    document.querySelectorAll(`[${DATA_ATTR}]`).forEach(el => {
-      const key = el.getAttribute(DATA_ATTR);
+    document.querySelectorAll(`[${TEXT_ATTR}]`).forEach(el => {
+      const key = el.getAttribute(TEXT_ATTR);
       if (dict[key] != null) el.textContent = dict[key];
     });
   }
 
   function applyPlaceholder(dict) {
-    document.querySelectorAll(`[${PLACEHOLDER}]`).forEach(el => {
-      const key = el.getAttribute(PLACEHOLDER);
+    document.querySelectorAll(`[${PH_ATTR}]`).forEach(el => {
+      const key = el.getAttribute(PH_ATTR);
       if (dict[key] != null) el.setAttribute('placeholder', dict[key]);
     });
   }
