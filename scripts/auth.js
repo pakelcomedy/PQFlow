@@ -1,5 +1,9 @@
-// scripts/auth.js
 (function() {
+  // ————————————————————————————————
+  // CONFIG: Base path (untuk GH Pages sub-path)
+  // ————————————————————————————————
+  const BASE_PATH = '/' + (location.pathname.split('/')[1] || '').replace(/\/$/, '');
+
   // ————————————————————————————————
   // INIT FIRESTORE & AUTH
   // ————————————————————————————————
@@ -42,15 +46,12 @@
 
       try {
         show(msgEl, 'Registering…', 'info');
-        // tandai untuk inisialisasi Firestore
         sessionStorage.setItem('pendingOrg', org);
         sessionStorage.removeItem('profileInited');
 
-        // buat user di Firebase Auth → otomatis login
         await auth.createUserWithEmailAndPassword(email, pw);
         show(msgEl, 'Account created! Finalizing…', 'info');
-
-        // tunggu onAuthStateChanged → redirect di sana
+        // redirect akan terjadi di onAuthStateChanged
       } catch (err) {
         console.error('Registration Error:', err);
         show(msgEl, err.message || 'Registration failed.', 'error');
@@ -63,24 +64,22 @@
   // ————————————————————————————————
   auth.onAuthStateChanged(async user => {
     const path = location.pathname;
-    const onAuthPage  = /\/pages\/auth\//.test(path);
-    const onAdminPage = /\/pages\/admin\//.test(path);
+    const onAuthPage  = new RegExp(`^${BASE_PATH}/pages/auth/`).test(path);
+    const onAdminPage = new RegExp(`^${BASE_PATH}/pages/admin/`).test(path);
 
-    // 1) Jika login & ada pendingOrg → inisialisasi profile sekali
     const pendingOrg    = sessionStorage.getItem('pendingOrg');
     const profileInited = sessionStorage.getItem('profileInited');
 
+    // 1) Inisialisasi profile baru setelah registrasi
     if (user && pendingOrg && !profileInited) {
       try {
         const uid = user.uid;
-        // tulis admin profile
         await db.collection('admins').doc(uid).set({
           organization: pendingOrg,
           email:        user.email,
           role:         'admin',
           createdAt:    firebase.firestore.FieldValue.serverTimestamp()
         });
-        // tulis default per-user settings
         await db
           .collection('users').doc(uid)
           .collection('settings').doc('config')
@@ -96,18 +95,19 @@
         sessionStorage.setItem('profileInited', '1');
         sessionStorage.removeItem('pendingOrg');
 
-        // langsung ke admin panel
-        return void (location.href = '/pages/admin/index.html');
+        // redirect ke Admin dashboard
+        location.href = `${BASE_PATH}/pages/admin/index.html`;
+        return;
       } catch (err) {
         console.error('Init profile failed:', err);
       }
     }
 
-    // 2) Route guard (login/logout redirect)
+    // 2) Route guard: 
     if (user && onAuthPage) {
-      location.replace('/pages/admin/index.html');
+      location.replace(`${BASE_PATH}/pages/admin/index.html`);
     } else if (!user && onAdminPage) {
-      location.replace('/pages/auth/login.html');
+      location.replace(`${BASE_PATH}/pages/auth/login.html`);
     }
   });
 
@@ -158,7 +158,7 @@
         show(msgEl, 'Sending reset link…', 'info');
         await auth.sendPasswordResetEmail(email);
         show(msgEl, 'Reset link sent! Check your inbox.', 'success');
-        setTimeout(() => location.href = 'login.html', 1500);
+        setTimeout(() => location.href = `${BASE_PATH}/pages/auth/login.html`, 1500);
       } catch (err) {
         console.error('Reset Error:', err);
         show(msgEl, err.message || 'Reset failed.', 'error');
@@ -177,7 +177,7 @@
       try {
         btn.disabled = true;
         await auth.signOut();
-        location.href = '/pages/auth/login.html';
+        location.href = `${BASE_PATH}/pages/auth/login.html`;
       } catch (err) {
         console.error('Logout Error:', err);
         const msgEl = document.querySelector('.status-message');
