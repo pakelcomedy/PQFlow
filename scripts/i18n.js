@@ -1,29 +1,26 @@
 (() => {
   const DEFAULT_LANG = 'en';
   const STORAGE_KEY  = 'lang';
-  const DICT_FOLDER  = 'lang/';       // <<-- diubah
+  // Absolute URL path under your Pages site:
+  const DICT_FOLDER  = '/PQFlow/lang/';  
+
   const TEXT_ATTR    = 'data-i18n';
   const PH_ATTR      = 'data-i18n-placeholder';
 
   const cache = new Map();
-  let currentLang = null;
 
   const dictUrl = lang => `${DICT_FOLDER}${lang}.json`;
 
   async function fetchDict(lang) {
     if (cache.has(lang)) return cache.get(lang);
-
     try {
       const res = await fetch(dictUrl(lang), { cache: 'no-cache' });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const dict = await res.json();
       cache.set(lang, dict);
       return dict;
-    } catch (err) {
-      console.warn(`i18n: gagal load "${lang}", fallback ke "${DEFAULT_LANG}"`);
-      if (lang !== DEFAULT_LANG) {
-        return fetchDict(DEFAULT_LANG);
-      }
+    } catch {
+      if (lang !== DEFAULT_LANG) return fetchDict(DEFAULT_LANG);
       return {};
     }
   }
@@ -48,7 +45,6 @@
     applyPlaceholder(dict);
     document.documentElement.lang = lang;
     localStorage.setItem(STORAGE_KEY, lang);
-    currentLang = lang;
   }
 
   document.addEventListener('DOMContentLoaded', () => {
@@ -57,9 +53,7 @@
 
     if (selector) {
       selector.value = saved;
-      selector.addEventListener('change', () => {
-        setLanguage(selector.value);
-      });
+      selector.addEventListener('change', () => setLanguage(selector.value));
     }
 
     setLanguage(saved);
