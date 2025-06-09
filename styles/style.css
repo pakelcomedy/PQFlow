@@ -826,3 +826,49 @@ html { scroll-behavior: smooth; }
   color: #4b5563;
   line-height: 1.5;
 }
+
+/* === Footer Language Selector === */
+.footer-col .lang-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.footer-col .lang-selector .sr-only {
+  position: absolute !important;
+  width: 1px; 
+  height: 1px; 
+  padding: 0; 
+  margin: -1px; 
+  overflow: hidden; 
+  clip: rect(0, 0, 0, 0); 
+  border: 0;
+}
+
+.footer-col .lang-selector select#langSelector {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 0.25em 0.75em;
+  font-size: 0.9rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg width='10' height='5' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0l5 5 5-5' stroke='%23666' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5em center;
+  background-size: 0.6em auto;
+}
+
+.footer-col .lang-selector select#langSelector:focus {
+  outline: none;
+  border-color: #e53935; /* primary red */
+  box-shadow: 0 0 0 2px rgba(229, 57, 53, 0.3);
+}
+
+.footer-col .lang-selector select#langSelector:hover {
+  border-color: #888;
+}
