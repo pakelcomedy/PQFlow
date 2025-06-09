@@ -22,14 +22,15 @@
 3. **Generate Join Link**
    In **Settings**, click **Generate Link & QR‑Code** → you’ll get:
 
-   ```
-   http://127.0.0.1:3000/index.html?org=<yourOrgId>
-   ```
+  ```
+  https://pakelcomedy.github.io/PQFlow/pages/tv.html?org=liKUu6DHFPWq0baRp12tPFsWx123
+  ```
 
    Share that QR or link with customers.
+   ![image](https://github.com/user-attachments/assets/7ceeef7d-75ae-4da6-bc0d-7dd55a831697)
 
 4. **User Joins**
-   Customer scans or clicks, lands on `/index.html?org=<orgId>`, taps **Confirm** → ticket created atomically in Firestore → redirected to `/pages/tv.html?org=<orgId>&ticket=<ticketId>`.
+   Customer scans or clicks, lands on `/pages/tv.html?org=<orgId>`, taps **Confirm** → ticket created atomically in Firestore → redirected to `/pages/tv.html?org=<orgId>&ticket=<ticketId>`.
 
 5. **TV Display**
    `/pages/tv.html?org=<orgId>&ticket=<ticketId>` shows only that one ticket’s number, keeps it on refresh, plus live clock.
